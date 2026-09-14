@@ -1,0 +1,15 @@
+{
+  "id": "daneshselwal/dias-credit-k015",
+  "title": "dias-credit-k015",
+  "code_file": "k015.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": ["daneshselwal/dias-dataset-k01"],
+  "kernel_sources": ["daneshselwal/dias-ensemble-k13"],
+  "competition_sources": [],
+  "model_sources": []
+}
