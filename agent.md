@@ -81,10 +81,15 @@ Run `rsync -av /Users/danesh/Documents/AGY/agy/classification/ /Users/danesh/Doc
    - **Kaggle Dependency:** These 15 models were uploaded as a dedicated Kaggle Dataset (`daneshselwal/dias-ensemble-models`, obfuscated as `k016-k030`) so other kernels could access them.
 
 ## 5. Active / Pending Pipelines
-1. **CREDIT Distillation (`credit/`)**
+*All pipelines are now COMPLETE as of 2026-09-16. No active Kaggle kernels running.*
+
+### ✅ CREDIT Distillation (`credit/`) — COMPLETED 2026-09-16
    - **Method:** Conformalized Regularized Distillation Training (Student learning from the 15 Ensembles).
-   - **Status:** Currently training on Kaggle as `k015` v4. 
-   - *Note for future agents:* Kaggle kernels cannot read large `.keras` files from other kernels via `kernel_sources`. This pipeline historically failed until the ensemble teachers were mounted explicitly as a `dataset_sources` dependency.
+   - **Models:** AlexNet_CNN_CREDIT_best.keras (260MB), GFNet_CREDIT_best.keras (125MB), ViT_UNet_CREDIT_best.keras (187MB)
+   - **Results:** CREDIT_Results.xlsx, credit_evaluation_summary.csv, credit_train_uncertainty_summary.csv, 3 spatial maps PNGs, confusion matrices PNG
+   - **GitHub:** Pushed via Git LFS (commit dcb2cfc)
+   - **Drive:** Synced to classification_65bands/credit/results/
+   - *Note for future agents:* Kaggle kernels cannot read large `.keras` files from other kernels via `kernel_sources`. Fix: mount ensemble teachers explicitly as `dataset_sources` (dias-ensemble-models dataset, k016-k030).
 
 ## 6. Future Skeletons (To Be Implemented)
 The original research repository contains several advanced methodologies that currently exist only as empty "skeleton" directories in this workspace. Future iterations of this project will port and execute these:
