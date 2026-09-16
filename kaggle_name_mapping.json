@@ -1,7 +1,7 @@
 {
   "$schema": "kaggle-upload-obfuscation-v1",
   "generated_at": "2026-09-09T07:20:00Z",
-  "updated_at": "2026-09-12T18:56:00Z",
+  "updated_at": "2026-09-16T11:00:00Z",
   "working_directory": "agy/classification",
   "obfuscated_to_original": {
     "data/k001.mat": "data/DIAS.mat",
@@ -48,7 +48,37 @@
     "ensemble/staging_crede/k014.ipynb": "ensemble/Model_uncertainty_CreDE.ipynb",
     "credit/k015.ipynb": "credit/Model_training_credit.ipynb",
     "k015.ipynb": "credit/Model_training_credit.ipynb",
-    "staging_credit/k015.ipynb": "credit/Model_training_credit.ipynb"
+    "staging_credit/k015.ipynb": "credit/Model_training_credit.ipynb",
+    "staging_ens_dataset/k016.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_1_final.keras",
+    "k016.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_1_final.keras",
+    "staging_ens_dataset/k017.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_2_final.keras",
+    "k017.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_2_final.keras",
+    "staging_ens_dataset/k018.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_3_final.keras",
+    "k018.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_3_final.keras",
+    "staging_ens_dataset/k019.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_4_final.keras",
+    "k019.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_4_final.keras",
+    "staging_ens_dataset/k020.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_5_final.keras",
+    "k020.keras": "ensemble/models/ensembles/AlexNet_CNN_ens_5_final.keras",
+    "staging_ens_dataset/k021.keras": "ensemble/models/ensembles/GFNet_ens_1_final.keras",
+    "k021.keras": "ensemble/models/ensembles/GFNet_ens_1_final.keras",
+    "staging_ens_dataset/k022.keras": "ensemble/models/ensembles/GFNet_ens_2_final.keras",
+    "k022.keras": "ensemble/models/ensembles/GFNet_ens_2_final.keras",
+    "staging_ens_dataset/k023.keras": "ensemble/models/ensembles/GFNet_ens_3_final.keras",
+    "k023.keras": "ensemble/models/ensembles/GFNet_ens_3_final.keras",
+    "staging_ens_dataset/k024.keras": "ensemble/models/ensembles/GFNet_ens_4_final.keras",
+    "k024.keras": "ensemble/models/ensembles/GFNet_ens_4_final.keras",
+    "staging_ens_dataset/k025.keras": "ensemble/models/ensembles/GFNet_ens_5_final.keras",
+    "k025.keras": "ensemble/models/ensembles/GFNet_ens_5_final.keras",
+    "staging_ens_dataset/k026.keras": "ensemble/models/ensembles/ViT_UNet_ens_1_final.keras",
+    "k026.keras": "ensemble/models/ensembles/ViT_UNet_ens_1_final.keras",
+    "staging_ens_dataset/k027.keras": "ensemble/models/ensembles/ViT_UNet_ens_2_final.keras",
+    "k027.keras": "ensemble/models/ensembles/ViT_UNet_ens_2_final.keras",
+    "staging_ens_dataset/k028.keras": "ensemble/models/ensembles/ViT_UNet_ens_3_final.keras",
+    "k028.keras": "ensemble/models/ensembles/ViT_UNet_ens_3_final.keras",
+    "staging_ens_dataset/k029.keras": "ensemble/models/ensembles/ViT_UNet_ens_4_final.keras",
+    "k029.keras": "ensemble/models/ensembles/ViT_UNet_ens_4_final.keras",
+    "staging_ens_dataset/k030.keras": "ensemble/models/ensembles/ViT_UNet_ens_5_final.keras",
+    "k030.keras": "ensemble/models/ensembles/ViT_UNet_ens_5_final.keras"
   },
   "original_to_obfuscated": {
     "data/DIAS.mat": "data/k001.mat",
@@ -65,7 +95,22 @@
     "multicp/Model_training_multihead.ipynb": "multicp/k012.ipynb",
     "ensemble/Model_training_ensembles.ipynb": "ensemble/k013.ipynb",
     "ensemble/Model_uncertainty_CreDE.ipynb": "ensemble/k014.ipynb",
-    "credit/Model_training_credit.ipynb": "credit/k015.ipynb"
+    "credit/Model_training_credit.ipynb": "credit/k015.ipynb",
+    "ensemble/models/ensembles/AlexNet_CNN_ens_1_final.keras": "staging_ens_dataset/k016.keras",
+    "ensemble/models/ensembles/AlexNet_CNN_ens_2_final.keras": "staging_ens_dataset/k017.keras",
+    "ensemble/models/ensembles/AlexNet_CNN_ens_3_final.keras": "staging_ens_dataset/k018.keras",
+    "ensemble/models/ensembles/AlexNet_CNN_ens_4_final.keras": "staging_ens_dataset/k019.keras",
+    "ensemble/models/ensembles/AlexNet_CNN_ens_5_final.keras": "staging_ens_dataset/k020.keras",
+    "ensemble/models/ensembles/GFNet_ens_1_final.keras": "staging_ens_dataset/k021.keras",
+    "ensemble/models/ensembles/GFNet_ens_2_final.keras": "staging_ens_dataset/k022.keras",
+    "ensemble/models/ensembles/GFNet_ens_3_final.keras": "staging_ens_dataset/k023.keras",
+    "ensemble/models/ensembles/GFNet_ens_4_final.keras": "staging_ens_dataset/k024.keras",
+    "ensemble/models/ensembles/GFNet_ens_5_final.keras": "staging_ens_dataset/k025.keras",
+    "ensemble/models/ensembles/ViT_UNet_ens_1_final.keras": "staging_ens_dataset/k026.keras",
+    "ensemble/models/ensembles/ViT_UNet_ens_2_final.keras": "staging_ens_dataset/k027.keras",
+    "ensemble/models/ensembles/ViT_UNet_ens_3_final.keras": "staging_ens_dataset/k028.keras",
+    "ensemble/models/ensembles/ViT_UNet_ens_4_final.keras": "staging_ens_dataset/k029.keras",
+    "ensemble/models/ensembles/ViT_UNet_ens_5_final.keras": "staging_ens_dataset/k030.keras"
   },
   "files": [
     {
@@ -224,6 +269,126 @@
       "obfuscated_relative_path": "credit/k015.ipynb",
       "staging_relative_path": "staging_credit/k015.ipynb",
       "kaggle_kernel_id": "daneshselwal/dias-credit-k015"
+    },
+    {
+      "code": "k016",
+      "original_filename": "AlexNet_CNN_ens_1_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/AlexNet_CNN_ens_1_final.keras",
+      "obfuscated_filename": "k016.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k016.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k017",
+      "original_filename": "AlexNet_CNN_ens_2_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/AlexNet_CNN_ens_2_final.keras",
+      "obfuscated_filename": "k017.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k017.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k018",
+      "original_filename": "AlexNet_CNN_ens_3_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/AlexNet_CNN_ens_3_final.keras",
+      "obfuscated_filename": "k018.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k018.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k019",
+      "original_filename": "AlexNet_CNN_ens_4_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/AlexNet_CNN_ens_4_final.keras",
+      "obfuscated_filename": "k019.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k019.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k020",
+      "original_filename": "AlexNet_CNN_ens_5_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/AlexNet_CNN_ens_5_final.keras",
+      "obfuscated_filename": "k020.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k020.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k021",
+      "original_filename": "GFNet_ens_1_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/GFNet_ens_1_final.keras",
+      "obfuscated_filename": "k021.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k021.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k022",
+      "original_filename": "GFNet_ens_2_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/GFNet_ens_2_final.keras",
+      "obfuscated_filename": "k022.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k022.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k023",
+      "original_filename": "GFNet_ens_3_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/GFNet_ens_3_final.keras",
+      "obfuscated_filename": "k023.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k023.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k024",
+      "original_filename": "GFNet_ens_4_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/GFNet_ens_4_final.keras",
+      "obfuscated_filename": "k024.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k024.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k025",
+      "original_filename": "GFNet_ens_5_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/GFNet_ens_5_final.keras",
+      "obfuscated_filename": "k025.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k025.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k026",
+      "original_filename": "ViT_UNet_ens_1_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/ViT_UNet_ens_1_final.keras",
+      "obfuscated_filename": "k026.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k026.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k027",
+      "original_filename": "ViT_UNet_ens_2_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/ViT_UNet_ens_2_final.keras",
+      "obfuscated_filename": "k027.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k027.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k028",
+      "original_filename": "ViT_UNet_ens_3_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/ViT_UNet_ens_3_final.keras",
+      "obfuscated_filename": "k028.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k028.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k029",
+      "original_filename": "ViT_UNet_ens_4_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/ViT_UNet_ens_4_final.keras",
+      "obfuscated_filename": "k029.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k029.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
+    },
+    {
+      "code": "k030",
+      "original_filename": "ViT_UNet_ens_5_final.keras",
+      "original_relative_path": "ensemble/models/ensembles/ViT_UNet_ens_5_final.keras",
+      "obfuscated_filename": "k030.keras",
+      "obfuscated_relative_path": "staging_ens_dataset/k030.keras",
+      "dataset_slug": "daneshselwal/dias-ensemble-models"
     }
   ]
 }
