@@ -8,8 +8,11 @@
   "enable_gpu": "true",
   "enable_tpu": "false",
   "enable_internet": "true",
-  "dataset_sources": ["daneshselwal/dias-dataset-k01"],
-  "kernel_sources": ["daneshselwal/dias-ensemble-k13"],
+  "dataset_sources": [
+    "daneshselwal/dias-dataset-k01",
+    "daneshselwal/dias-ensemble-models"
+  ],
+  "kernel_sources": [],
   "competition_sources": [],
   "model_sources": []
 }
