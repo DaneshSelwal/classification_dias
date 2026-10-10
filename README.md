@@ -50,6 +50,9 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03)
     * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03)
   * 📁 **models/**
+      * `AlexNet_CNN_best.keras`
+      * `AlexNet_CNN_final.keras`
+      * `ViT_UNet_best.keras`
   * 📁 **results/**
       * `AlexNet_CNN_classification_report.json`
       * `GFNet_classification_report.json`
@@ -76,10 +79,6 @@ Below is the directory structure mirroring our local repository, with direct lin
         * `run_config.json`
         * `summary_metrics.csv`
 * 📁 **credit/**
-    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
-  * 📁 **credit/**
-    * 📁 **models/**
-        * `AlexNet_CNN_CREDIT_best.keras.tmp`
     * 📓 [dias-credit-k015.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
   * 📁 **models/**
       * `AlexNet_CNN_CREDIT_best.keras`
@@ -101,7 +100,19 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13)
     * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
   * 📁 **models/**
+      * `AlexNet_CNN_best.keras`
+      * `AlexNet_CNN_final.keras`
+      * `ViT_UNet_best.keras`
+      * `ViT_UNet_final.keras`
     * 📁 **ensembles/**
+        * `AlexNet_CNN_ens_1_final.keras`
+        * `AlexNet_CNN_ens_2_final.keras`
+        * `AlexNet_CNN_ens_3_final.keras`
+        * `AlexNet_CNN_ens_4_final.keras`
+        * `AlexNet_CNN_ens_5_final.keras`
+        * `ViT_UNet_ens_1_final.keras`
+        * `ViT_UNet_ens_4_final.keras`
+        * `ViT_UNet_ens_5_final.keras`
   * 📁 **results/**
       * `AlexNet_CNN_CreDE_spatial_maps.png`
       * `AlexNet_CNN_classification_report.json`
@@ -123,6 +134,12 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12)
     * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
   * 📁 **models/**
+      * `AlexNet_CNN_MultiHead_best.keras`
+      * `AlexNet_CNN_MultiHead_final.keras`
+      * `GFNet_MultiHead_best.keras`
+      * `GFNet_MultiHead_final.keras`
+      * `ViT_UNet_MultiHead_best.keras`
+      * `ViT_UNet_MultiHead_final.keras`
       * `model_registry_multihead.json`
   * 📁 **results/**
       * `75% ps_9 Performance Measure.png`
