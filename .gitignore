@@ -1,0 +1,4 @@
+*.log
+*.py
+tests/
+*.h5
