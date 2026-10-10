@@ -44,17 +44,17 @@ Below is the directory structure mirroring our local repository, with direct lin
 
 * 📁 **baseline/**
     * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03)
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
 * 📁 **credit/**
     * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
 * 📁 **data/**
 * 📁 **ensemble/**
     * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13)
-    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
+    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-crede-k014)
 * 📁 **multicp/**
     * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12)
-    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
+    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k031)
 * 📁 **multicp_sacp/**
-    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
+    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k044)
 * 📁 **sacp/**
     * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-sacp-k11)
