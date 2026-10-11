@@ -266,7 +266,7 @@ def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
                 ["kaggle", "kernels", "output", f"{USERNAME}/{slug}", "-p", tmpdir],
                 capture_output=True,
                 text=True,
-                timeout=180,
+                timeout=600,
             )
             print(f"[{slug}] Download output: {res.stdout.strip()[:300]}")
             copied = 0
