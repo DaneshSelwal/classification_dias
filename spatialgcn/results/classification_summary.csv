@@ -1,0 +1,2 @@
+model,capacity_tag,test_accuracy,kappa,macro_f1,weighted_f1,val_nll,test_nll,val_brier,test_brier,test_ece_15bin,epochs_configured,epochs_ran,train_time_sec,best_model_path,final_model_path
+SpatialGCN,spatialgcn_arch,0.9704616298055514,0.964413690545473,0.9441818476222359,0.9703995486551594,0.11192759445236707,0.11319438873813907,0.042981656204049694,0.044767675978457266,0.042150620386033205,100,100,171.933636529,/kaggle/working/Classification/spatialgcn/models/SpatialGCN_best.keras,/kaggle/working/Classification/spatialgcn/models/SpatialGCN_final.keras
