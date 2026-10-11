@@ -1,0 +1,2 @@
+model,capacity_tag,test_accuracy,kappa,macro_f1,weighted_f1,val_nll,test_nll,val_brier,test_brier,test_ece_15bin,epochs_configured,epochs_ran,train_time_sec,best_model_path,final_model_path
+GeoRSCLIP_TextHead,georsclip_arch,1.0,1.0,1.0,1.0,0.03958643164585087,0.039622468690707166,0.0017506938752836706,0.0017758096906955378,0.038829308594301226,100,100,820.3104081209999,/kaggle/working/Classification/georsclip/models/GeoRSCLIP_TextHead_best.keras,/kaggle/working/Classification/georsclip/models/GeoRSCLIP_TextHead_final.keras
