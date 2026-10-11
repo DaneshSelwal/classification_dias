@@ -92,6 +92,7 @@ KERNELS = [
         "type": "training",
         "folder": "dapm",
         "enable_gpu": True,
+        "kernel_sources": ["daneshselwal/dias-baseline-k03"],
         "dependents": ["dias-dapm-uq-k25"],
     },
     {
@@ -100,6 +101,7 @@ KERNELS = [
         "type": "evaluation",
         "folder": "dapm",
         "enable_gpu": True,
+        "kernel_sources": ["daneshselwal/dias-baseline-k03"],
         "parent": "dias-dapm-k24",
     },
 ]
@@ -145,6 +147,11 @@ def generate_metadata(kernel_def: dict, repo_root: Path) -> dict:
 
     if "parent" in kernel_def:
         meta["kernel_sources"].append(f"{USERNAME}/{kernel_def['parent']}")
+
+    if "kernel_sources" in kernel_def:
+        for ks in kernel_def["kernel_sources"]:
+            if ks not in meta["kernel_sources"]:
+                meta["kernel_sources"].append(ks)
 
     return meta
 
@@ -237,11 +244,11 @@ SYNC_TARGETS = {
     "dias-dapm-k24": {
         "models_dir": "dapm/models",
         "results_dir": "dapm/results",
-        "primary_file": "DAPM_best.keras",
+        "primary_file": "dapm_full_training_summary.csv",
     },
     "dias-dapm-uq-k25": {
         "results_dir": "dapm/results",
-        "primary_file": "dapm_summary_comparison.csv",
+        "primary_file": "dapm_full_summary_metrics.csv",
     },
 }
 
@@ -276,7 +283,7 @@ def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
                         src_path = Path(root) / f
                         shutil.copy2(src_path, results_dir / f)
                         copied += 1
-                    elif f.endswith(".keras"):
+                    elif f.endswith((".keras", ".h5")):
                         src_path = Path(root) / f
                         shutil.copy2(src_path, models_dir / f)
                         copied += 1
