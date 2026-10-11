@@ -54,22 +54,22 @@ Below is the directory structure mirroring our local repository, with direct lin
 * 📁 **credit/**
     * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
 * 📁 **dapm/**
-    * 📓 Model_training_dapm_full.ipynb
+    * 📓 [Model_training_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-k24)
     * 📓 Model_uncertainty_dapm_cp.ipynb
-    * 📓 Model_uncertainty_dapm_full.ipynb
+    * 📓 [Model_uncertainty_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-uq-k25)
 * 📁 **data/**
 * 📁 **dofa/**
-    * 📓 Model_training.ipynb
-    * 📓 Model_uncertainty_comparison.ipynb
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-k18)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-uq-k19)
 * 📁 **ensemble/**
     * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13)
     * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-crede-k014)
 * 📁 **georsclip/**
-    * 📓 Model_training.ipynb
-    * 📓 Model_uncertainty_comparison.ipynb
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-k20)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-uq-k21)
 * 📁 **mambahsi/**
-    * 📓 Model_training_mambahsi.ipynb
-    * 📓 Model_uncertainty_comparison_mambahsi.ipynb
+    * 📓 [Model_training_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-k16)
+    * 📓 [Model_uncertainty_comparison_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-uq-k17)
 * 📁 **multicp/**
     * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12)
     * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k031)
@@ -78,5 +78,5 @@ Below is the directory structure mirroring our local repository, with direct lin
 * 📁 **sacp/**
     * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-sacp-k11)
 * 📁 **spatialgcn/**
-    * 📓 Model_training.ipynb
-    * 📓 Model_uncertainty_comparison.ipynb
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-k22)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-uq-k23)
