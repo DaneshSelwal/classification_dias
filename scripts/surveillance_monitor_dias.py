@@ -35,7 +35,7 @@ KERNELS = [
         "name": "Model_uncertainty_comparison_mambahsi.ipynb",
         "type": "evaluation",
         "folder": "mambahsi",
-        "enable_gpu": False,
+        "enable_gpu": True,
         "parent": "dias-mambahsi-k16",
     },
     {
@@ -51,7 +51,7 @@ KERNELS = [
         "name": "Model_uncertainty_comparison.ipynb",
         "type": "evaluation",
         "folder": "dofa",
-        "enable_gpu": False,
+        "enable_gpu": True,
         "parent": "dias-dofa-k18",
     },
     {
@@ -67,7 +67,7 @@ KERNELS = [
         "name": "Model_uncertainty_comparison.ipynb",
         "type": "evaluation",
         "folder": "georsclip",
-        "enable_gpu": False,
+        "enable_gpu": True,
         "parent": "dias-georsclip-k20",
     },
     {
@@ -83,7 +83,7 @@ KERNELS = [
         "name": "Model_uncertainty_comparison.ipynb",
         "type": "evaluation",
         "folder": "spatialgcn",
-        "enable_gpu": False,
+        "enable_gpu": True,
         "parent": "dias-spatialgcn-k22",
     },
     {
@@ -99,7 +99,7 @@ KERNELS = [
         "name": "Model_uncertainty_dapm_full.ipynb",
         "type": "evaluation",
         "folder": "dapm",
-        "enable_gpu": False,
+        "enable_gpu": True,
         "parent": "dias-dapm-k24",
     },
 ]
