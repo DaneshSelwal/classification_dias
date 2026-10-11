@@ -12,9 +12,15 @@ To adhere to machine learning best practices, this project is fully decoupled ac
 This project rigorously evaluates several state-of-the-art uncertainty quantification and classification paradigms:
 
 - `/baseline/`: Standard architecture evaluation including **AlexNet CNN**, **GFNet**, and **ViT-UNet**.
+- `/mambahsi/`: **State Space Model (SSM)** MambaHSI spatial-spectral selective-scan network across Small, Base, and Large capacity variants.
+- `/dofa/`: **Dynamic One-For-All (DOFA)** foundation framework featuring continuous dynamic wavelength embedding hypernetworks and Hiera hierarchical attention fusion.
+- `/georsclip/`: **GeoRSCLIP** vision-language text-conditioned classifier utilizing learnable semantic class prompts.
+- `/spatialgcn/`: **Spatial Graph Convolutional Network (SpatialGCN)** performing Kipf-Welling graph convolutions over pixel-adjacency spatial grids.
+- `/dapm/`: **Domain-Adaptive Prediction Model (DAPM)** multi-stage adversarial domain alignment.
 - `/credit/`: **Evidential Deep Learning** (CREDIT) for deterministic uncertainty estimation.
 - `/ensemble/`: **Deep Ensembles** (5-model stacks) for highly calibrated epistemic uncertainty.
 - `/multicp/`: Multi-head adaptation networks for simultaneous classification and bounded prediction.
+- `/multicp_sacp/`: Conformal prediction with multi-head spatial aggregation.
 - `/sacp/`: **Spatially Aggregated Conformal Prediction** evaluated across varying spatial window sizes (3x3, 5x5, 7x7, 9x9) to generate statistically rigorous confidence bounds.
 - `/data/`: (Data is decoupled to the Hugging Face Dataset repository).
 
@@ -47,10 +53,23 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
 * 📁 **credit/**
     * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
+* 📁 **dapm/**
+    * 📓 Model_training_dapm_full.ipynb
+    * 📓 Model_uncertainty_dapm_cp.ipynb
+    * 📓 Model_uncertainty_dapm_full.ipynb
 * 📁 **data/**
+* 📁 **dofa/**
+    * 📓 Model_training.ipynb
+    * 📓 Model_uncertainty_comparison.ipynb
 * 📁 **ensemble/**
     * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13)
     * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-crede-k014)
+* 📁 **georsclip/**
+    * 📓 Model_training.ipynb
+    * 📓 Model_uncertainty_comparison.ipynb
+* 📁 **mambahsi/**
+    * 📓 Model_training_mambahsi.ipynb
+    * 📓 Model_uncertainty_comparison_mambahsi.ipynb
 * 📁 **multicp/**
     * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12)
     * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k031)
@@ -58,3 +77,6 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k044)
 * 📁 **sacp/**
     * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-sacp-k11)
+* 📁 **spatialgcn/**
+    * 📓 Model_training.ipynb
+    * 📓 Model_uncertainty_comparison.ipynb
