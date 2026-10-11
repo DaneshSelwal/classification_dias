@@ -299,6 +299,10 @@ def git_sync_push(repo_root: Path):
         env = os.environ.copy()
         env["GIT_CONFIG_GLOBAL"] = "/dev/null"
         env["GIT_CONFIG_SYSTEM"] = "/dev/null"
+        env["GIT_AUTHOR_NAME"] = "Danesh Selwal"
+        env["GIT_AUTHOR_EMAIL"] = "selwaldanesh@gmail.com"
+        env["GIT_COMMITTER_NAME"] = "Danesh Selwal"
+        env["GIT_COMMITTER_EMAIL"] = "selwaldanesh@gmail.com"
         subprocess.run(["git", "add", "."], cwd=repo_root, env=env, check=True)
         commit_res = subprocess.run(
             ["git", "commit", "-m", "feat(dias): sync fresh 65-band evaluation and model artifacts\n\nCo-authored-by: Claude <claude@anthropic.com>",
