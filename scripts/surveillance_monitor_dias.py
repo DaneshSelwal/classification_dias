@@ -362,6 +362,10 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
             cur_status = readings.get(slug, "UNKNOWN")
 
             if parent_status == "COMPLETE" and cur_status not in ("COMPLETE", "RUNNING", "QUEUED"):
+                if state.get(slug, {}).get("synced", False):
+                    continue
+                if cur_status.startswith("ERR:") or "timed out" in cur_status.lower():
+                    continue
                 last_trig = state.get(slug, {}).get("last_triggered_ts", 0)
                 # Allow retriggering if not triggered in the last 120s
                 if time.time() - last_trig > 120:
