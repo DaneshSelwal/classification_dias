@@ -219,7 +219,7 @@ SYNC_TARGETS = {
     "dias-dofa-k18": {
         "models_dir": "dofa/models",
         "results_dir": "dofa/results",
-        "primary_file": "DOFA_Base_best.keras",
+        "primary_file": "DOFA_Hiera_Fusion_best.keras",
     },
     "dias-dofa-uq-k19": {
         "results_dir": "dofa/results/uncertainty_results",

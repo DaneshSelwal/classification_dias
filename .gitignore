@@ -3,3 +3,10 @@
 !scripts/*.py
 tests/
 *.h5
+*.keras
+*.mat
+data/
+surveillance_log_dias.jsonl
+scripts/.trigger_state.json
+__pycache__/
+*.pyc
