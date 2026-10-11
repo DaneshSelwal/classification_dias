@@ -197,6 +197,54 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
         print(f"[{slug}] Push exception: {e}")
         return False
 
+SYNC_TARGETS = {
+    "dias-spatialgcn-k22": {
+        "models_dir": "spatialgcn/models",
+        "results_dir": "spatialgcn/results",
+        "primary_file": "SpatialGCN_best.keras",
+    },
+    "dias-spatialgcn-uq-k23": {
+        "results_dir": "spatialgcn/results/uncertainty_results",
+        "primary_file": "conformal_reports_all_models.xlsx",
+    },
+    "dias-mambahsi-k16": {
+        "models_dir": "mambahsi/models",
+        "results_dir": "mambahsi/results",
+        "primary_file": "MambaHSI_Base_best.keras",
+    },
+    "dias-mambahsi-uq-k17": {
+        "results_dir": "mambahsi/results/uncertainty_results",
+        "primary_file": "conformal_reports_all_models.xlsx",
+    },
+    "dias-dofa-k18": {
+        "models_dir": "dofa/models",
+        "results_dir": "dofa/results",
+        "primary_file": "DOFA_Base_best.keras",
+    },
+    "dias-dofa-uq-k19": {
+        "results_dir": "dofa/results/uncertainty_results",
+        "primary_file": "conformal_reports_all_models.xlsx",
+    },
+    "dias-georsclip-k20": {
+        "models_dir": "georsclip/models",
+        "results_dir": "georsclip/results",
+        "primary_file": "GeoRSCLIP_ViT_best.keras",
+    },
+    "dias-georsclip-uq-k21": {
+        "results_dir": "georsclip/results/uncertainty_results",
+        "primary_file": "conformal_reports_all_models.xlsx",
+    },
+    "dias-dapm-k24": {
+        "models_dir": "dapm/models",
+        "results_dir": "dapm/results",
+        "primary_file": "DAPM_best.keras",
+    },
+    "dias-dapm-uq-k25": {
+        "results_dir": "dapm/results",
+        "primary_file": "dapm_summary_comparison.csv",
+    },
+}
+
 def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
     """Download outputs and sync to local repository."""
     kernel_def = next((k for k in KERNELS if k["slug"] == slug), None)
@@ -204,8 +252,12 @@ def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
         return False
 
     folder = kernel_def["folder"]
-    dest_dir = repo_root / folder / "results"
-    dest_dir.mkdir(parents=True, exist_ok=True)
+    target_info = SYNC_TARGETS.get(slug, {})
+    results_dir = repo_root / target_info.get("results_dir", f"{folder}/results")
+    models_dir = repo_root / target_info.get("models_dir", f"{folder}/models")
+    results_dir.mkdir(parents=True, exist_ok=True)
+    if "models_dir" in target_info:
+        models_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"[{slug}] COMPLETE! Downloading outputs to verify and sync...")
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -217,20 +269,44 @@ def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
                 timeout=180,
             )
             print(f"[{slug}] Download output: {res.stdout.strip()[:300]}")
-            # Find and copy results
             copied = 0
             for root, _, files in os.walk(tmpdir):
                 for f in files:
-                    if f.endswith((".csv", ".xlsx", ".json", ".png", ".keras")):
+                    if f.endswith((".csv", ".xlsx", ".json", ".png")):
                         src_path = Path(root) / f
-                        rel_dest = dest_dir / f
-                        shutil.copy2(src_path, rel_dest)
+                        shutil.copy2(src_path, results_dir / f)
                         copied += 1
-            print(f"[{slug}] Successfully synced {copied} file(s) -> {dest_dir}")
+                    elif f.endswith(".keras"):
+                        src_path = Path(root) / f
+                        shutil.copy2(src_path, models_dir / f)
+                        copied += 1
+            print(f"[{slug}] Successfully synced {copied} file(s) -> {results_dir}")
             return copied > 0
         except Exception as e:
             print(f"[{slug}] Error syncing artifacts: {e}")
             return False
+
+def git_sync_push(repo_root: Path):
+    """Automatically commit and push newly synced artifacts with strict attribution."""
+    try:
+        env = os.environ.copy()
+        env["GIT_CONFIG_GLOBAL"] = "/dev/null"
+        env["GIT_CONFIG_SYSTEM"] = "/dev/null"
+        subprocess.run(["git", "add", "."], cwd=repo_root, env=env, check=True)
+        commit_res = subprocess.run(
+            ["git", "commit", "-m", "feat(dias): sync fresh 65-band evaluation and model artifacts\n\nCo-authored-by: Claude <claude@anthropic.com>",
+             "--author=Danesh Selwal <selwaldanesh@gmail.com>"],
+            cwd=repo_root, env=env, capture_output=True, text=True
+        )
+        if commit_res.returncode == 0:
+            print("Git commit successful:", commit_res.stdout.strip())
+            push_res = subprocess.run(
+                ["git", "push", "origin", "main"],
+                cwd=repo_root, env=env, capture_output=True, text=True
+            )
+            print("Git push result:", push_res.stdout.strip() or push_res.stderr.strip())
+    except Exception as e:
+        print(f"Git sync push exception: {e}")
 
 def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
     """Auto-trigger downstream evaluation and launch next training as GPU slots open."""
@@ -244,52 +320,69 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
             state = {}
 
     triggered = []
+    synced_any = False
 
-    # 1. Check completed kernels and trigger their evaluations
+    # 1. Sync completed kernels
     for k in KERNELS:
         slug = k["slug"]
         status = readings.get(slug, "UNKNOWN")
 
         if status == "COMPLETE":
-            # Sync artifacts if not synced yet
             if slug not in state or not state[slug].get("synced", False):
                 success = sync_completed_artifacts(slug, repo_root)
                 state.setdefault(slug, {})["synced"] = success
+                if success:
+                    synced_any = True
 
-            # Trigger child evaluations if training kernel completed
-            if k["type"] == "training" and "dependents" in k:
-                for dep in k["dependents"]:
-                    if dep not in state or not state[dep].get("triggered", False):
-                        print(f"[{slug} COMPLETE] Auto-triggering evaluation: {dep}")
-                        if retrigger_kernel(dep, repo_root):
-                            state.setdefault(dep, {})["triggered"] = True
-                            triggered.append(dep)
-
-    # 2. Check active GPU training kernels count
+    # 2. Check active GPU sessions (RUNNING or QUEUED)
     active_gpu_kernels = [
         k["slug"] for k in KERNELS
         if k["enable_gpu"] and readings.get(k["slug"]) in ("RUNNING", "QUEUED")
     ]
 
-    # If fewer than 2 GPU sessions, queue next pending training kernel
+    # 3. PRIORITY 1: Trigger or retrigger evaluation kernels for COMPLETED parent models
+    for k in KERNELS:
+        if len(active_gpu_kernels) >= 2:
+            break
+        if k["type"] == "evaluation":
+            slug = k["slug"]
+            parent_slug = k.get("parent")
+            parent_status = readings.get(parent_slug, "UNKNOWN")
+            cur_status = readings.get(slug, "UNKNOWN")
+
+            if parent_status == "COMPLETE" and cur_status not in ("COMPLETE", "RUNNING", "QUEUED"):
+                last_trig = state.get(slug, {}).get("last_triggered_ts", 0)
+                # Allow retriggering if not triggered in the last 120s
+                if time.time() - last_trig > 120:
+                    print(f"[{slug}] Parent {parent_slug} COMPLETE, status is {cur_status}. Triggering evaluation...")
+                    if retrigger_kernel(slug, repo_root):
+                        state.setdefault(slug, {})["triggered"] = True
+                        state[slug]["last_triggered_ts"] = time.time()
+                        triggered.append(slug)
+                        active_gpu_kernels.append(slug)
+
+    # 4. PRIORITY 2: If GPU slots still open (< 2), launch next pending training kernel
     if len(active_gpu_kernels) < 2:
         training_order = [
             "dias-mambahsi-k16", "dias-spatialgcn-k22",
             "dias-dofa-k18", "dias-georsclip-k20", "dias-dapm-k24"
         ]
         for t_slug in training_order:
+            if len(active_gpu_kernels) >= 2:
+                break
             t_status = readings.get(t_slug, "UNKNOWN")
-            if t_status in ("UNKNOWN", "ERR") and not state.get(t_slug, {}).get("started", False):
+            if t_status not in ("COMPLETE", "RUNNING", "QUEUED") and not state.get(t_slug, {}).get("started", False):
                 print(f"GPU slot available ({len(active_gpu_kernels)} active). Launching next: {t_slug}")
                 if retrigger_kernel(t_slug, repo_root):
                     state.setdefault(t_slug, {})["started"] = True
                     triggered.append(t_slug)
                     active_gpu_kernels.append(t_slug)
-                    if len(active_gpu_kernels) >= 2:
-                        break
 
     with open(state_file, "w") as f:
         json.dump(state, f, indent=2)
+
+    if synced_any:
+        git_sync_push(repo_root)
 
     return triggered
 
