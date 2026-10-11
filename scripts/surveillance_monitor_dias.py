@@ -232,6 +232,67 @@ def sync_completed_artifacts(slug: str, repo_root: Path) -> bool:
             print(f"[{slug}] Error syncing artifacts: {e}")
             return False
 
+def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
+    """Auto-trigger downstream evaluation and launch next training as GPU slots open."""
+    state_file = repo_root / "scripts" / ".trigger_state.json"
+    state = {}
+    if state_file.exists():
+        try:
+            with open(state_file) as f:
+                state = json.load(f)
+        except Exception:
+            state = {}
+
+    triggered = []
+
+    # 1. Check completed kernels and trigger their evaluations
+    for k in KERNELS:
+        slug = k["slug"]
+        status = readings.get(slug, "UNKNOWN")
+
+        if status == "COMPLETE":
+            # Sync artifacts if not synced yet
+            if slug not in state or not state[slug].get("synced", False):
+                success = sync_completed_artifacts(slug, repo_root)
+                state.setdefault(slug, {})["synced"] = success
+
+            # Trigger child evaluations if training kernel completed
+            if k["type"] == "training" and "dependents" in k:
+                for dep in k["dependents"]:
+                    if dep not in state or not state[dep].get("triggered", False):
+                        print(f"[{slug} COMPLETE] Auto-triggering evaluation: {dep}")
+                        if retrigger_kernel(dep, repo_root):
+                            state.setdefault(dep, {})["triggered"] = True
+                            triggered.append(dep)
+
+    # 2. Check active GPU training kernels count
+    active_gpu_kernels = [
+        k["slug"] for k in KERNELS
+        if k["enable_gpu"] and readings.get(k["slug"]) in ("RUNNING", "QUEUED")
+    ]
+
+    # If fewer than 2 GPU sessions, queue next pending training kernel
+    if len(active_gpu_kernels) < 2:
+        training_order = [
+            "dias-mambahsi-k16", "dias-spatialgcn-k22",
+            "dias-dofa-k18", "dias-georsclip-k20", "dias-dapm-k24"
+        ]
+        for t_slug in training_order:
+            t_status = readings.get(t_slug, "UNKNOWN")
+            if t_status in ("UNKNOWN", "ERR") and not state.get(t_slug, {}).get("started", False):
+                print(f"GPU slot available ({len(active_gpu_kernels)} active). Launching next: {t_slug}")
+                if retrigger_kernel(t_slug, repo_root):
+                    state.setdefault(t_slug, {})["started"] = True
+                    triggered.append(t_slug)
+                    active_gpu_kernels.append(t_slug)
+                    if len(active_gpu_kernels) >= 2:
+                        break
+
+    with open(state_file, "w") as f:
+        json.dump(state, f, indent=2)
+
+    return triggered
+
 def take_reading(repo_root: Path) -> dict:
     """Take a snapshot reading of all kernels and log."""
     readings = {}
@@ -245,10 +306,15 @@ def take_reading(repo_root: Path) -> dict:
         readings[slug] = status
         print(f"{slug:<24} | {k['type']:<12} | {status:<15} | {k['name']}")
 
+    triggered = check_and_auto_trigger(readings, repo_root)
+
     # Write log
     log_file = repo_root / "surveillance_log_dias.jsonl"
     with open(log_file, "a", encoding="utf-8") as f:
-        f.write(json.dumps({"timestamp": now_str, "readings": readings}) + "\n")
+        f.write(json.dumps({"timestamp": now_str, "readings": readings, "triggered": triggered}) + "\n")
+
+    if triggered:
+        print(f"Auto-triggered kernels: {triggered}")
 
     return readings
 
