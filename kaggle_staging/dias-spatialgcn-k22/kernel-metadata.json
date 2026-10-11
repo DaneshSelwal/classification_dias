@@ -1,0 +1,17 @@
+{
+  "id": "daneshselwal/dias-spatialgcn-k22",
+  "title": "dias-spatialgcn-k22",
+  "code_file": "Model_training.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "daneshselwal/dias-dataset-k01"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": []
+}
