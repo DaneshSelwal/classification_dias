@@ -1,0 +1,30 @@
+{
+  "model_key": "GFNet",
+  "base_model_path": "/kaggle/input/dias-baseline-k03/models/GFNet_best.keras",
+  "feature_dim": 512,
+  "latent_dim": 64,
+  "num_classes": 8,
+  "decoder_hidden_dim": 256,
+  "discriminator_hidden_dim": 128,
+  "classifier_hidden_dim": 128,
+  "diffusion_hidden_dim": 256,
+  "diffusion_T": 100,
+  "beta_start": 0.0001,
+  "beta_end": 0.02,
+  "patch_shape": [
+    9,
+    9,
+    65
+  ],
+  "freeze_backbone": true,
+  "source_rule": "labeled_pixels",
+  "target_rule": "unlabeled_pixels_same_scene",
+  "weights": {
+    "encoder": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_encoder.weights.h5",
+    "source_decoder": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_source_decoder.weights.h5",
+    "target_decoder": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_target_decoder.weights.h5",
+    "classifier": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_classifier.weights.h5",
+    "discriminator": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_discriminator.weights.h5",
+    "diffusion": "/kaggle/working/Classification/dapm/dapm_full_artifacts/GFNet_dapm_full_diffusion.weights.h5"
+  }
+}
