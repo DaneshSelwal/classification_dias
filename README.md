@@ -44,23 +44,34 @@ This project was developed, orchestrated, and finalized over an intensive **8 da
 Check the `agent_rulebook.md` for strict contribution guidelines, including the Zero-Footprint memory policies and proper Google Drive staging protocols for this repository.
 
 ---
-# 65 Bands DIAS Data - Directory & Kaggle Links
 
-Below is the directory structure mirroring our local repository, with direct links to the public notebooks where applicable:
+## 📊 65-Band DIAS Benchmark Summary
 
-## 📊 65-Band DIAS Benchmark Summary (All Models Verified)
+All values below are read directly from the committed result files (`*/results/classification_summary.csv`, `*/results/uncertainty_results/summary_metrics.csv`, `sacp/results/combined_summary_all_windows.csv`, `dapm/results/dapm_full_summary_metrics.csv`). Conformal results use α = 0.05 (95% target coverage); Split Conformal is shown for comparability.
 
-| Architecture / Framework | Paradigm | Top-1 Test Acc | Conformal Coverage (95% target) | Mean Set Size | Runtime / Status |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **DOFA (Hiera Fusion)** | Foundation Hypernetwork | **100.00%** | **95.15%** | **1.00** | ✅ COMPLETE |
-| **GeoRSCLIP (ViT)** | Vision-Language Foundation | **100.00%** | **95.01%** | **1.00** | ✅ COMPLETE |
-| **MambaHSI (Base SSM)** | State Space Model | **99.99%** | **96.27%** | **1.01** | ✅ COMPLETE |
-| **DAPM (GFNet Backbone)** | Domain Adaptation Diffusion | **99.99%** | **99.90%** (Certainty) | — | ✅ COMPLETE |
-| **DAPM (AlexNet Backbone)**| Domain Adaptation Diffusion | **99.97%** | **99.83%** (Certainty) | — | ✅ COMPLETE |
-| **DAPM (ViT-UNet Backbone)**| Domain Adaptation Diffusion| **99.96%** | **99.95%** (Certainty) | — | ✅ COMPLETE |
-| **SpatialGCN (Graph Conv)**| Spatial Graph Network | **97.05%** | **95.40%** | **1.02** | ✅ COMPLETE |
-| **Baseline (AlexNet / GFNet)**| Standard CNN & Frequency | **99.98%** | **95.20%** | **1.01** | ✅ COMPLETE |
-| **SACP (Spatial Multi-Window)**| Spatially Aggregated CP | **99.95%** | **95.10%** | **1.00** | ✅ COMPLETE |
+| Model | Test Accuracy | Split CP Coverage | Split CP Avg Set Size |
+| :--- | :---: | :---: | :---: |
+| Baseline — GFNet | 99.99% | 95.06% | 0.951 |
+| Baseline — AlexNet CNN | 99.93% | 95.09% | 0.951 |
+| Baseline — ViT-UNet | 99.93% | 94.78% | 0.948 |
+| DOFA — Hiera ViT | 100.00% | 95.58% | 0.956 |
+| DOFA — Hiera Fusion | 99.98% | 94.97% | 0.950 |
+| DOFA — Spectral | 83.91% | 95.13% | 1.523 |
+| GeoRSCLIP — TextHead | 100.00% | 94.75% | 0.947 |
+| MambaHSI — Base | 99.99% | 95.96% | 0.960 |
+| SpatialGCN | 97.05% | 95.24% | 0.965 |
+
+> Avg set size < 1 occurs because class-conditional/split thresholds can produce empty sets for a small fraction of pixels.
+
+**SACP (spatially aggregated CP, baseline backbones):** coverage 99.97–100% with avg set size 1.000–1.001 across window sizes 3/5/7/9 (see `sacp/results/combined_summary_all_windows.csv`).
+
+**DAPM (diffusion-based, t-test p < 0.05, 30 samples):** this is not a conformal method, so it reports a certainty rate rather than coverage.
+
+| DAPM Backbone | Labeled Accuracy | Certainty Rate | Uncertain Pixels |
+| :--- | :---: | :---: | :---: |
+| AlexNet CNN | 99.97% | 99.83% | 434 |
+| GFNet | 99.998% | 99.90% | 256 |
+| ViT-UNet | 99.96% | 99.95% | 122 |
 
 ---
 
