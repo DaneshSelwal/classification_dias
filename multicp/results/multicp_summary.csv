@@ -1,0 +1,7 @@
+model_key,model_name,scoring_method,empirical_coverage,avg_set_size,scene_coverage,scene_avg_set_size,uncertain_pixel_rate,model_path
+AlexNet_CNN_MultiHead,AlexNet CNN,RAPS,0.7072881104349117,0.9525223181153121,0.127729549887185,1.0737941807491105,0.11004638671875,/kaggle/input/dias-multicp-k12/results/AlexNet_CNN_MultiHead_best.keras
+AlexNet_CNN_MultiHead,AlexNet CNN,SAPS,0.7023897877393499,0.9524587035348502,0.12576006730658917,1.045220449347888,0.10877609252929688,/kaggle/input/dias-multicp-k12/results/AlexNet_CNN_MultiHead_best.keras
+GFNet_MultiHead,GFNet,RAPS,0.6799762505566276,0.9466485718526686,0.1306550919729244,1.0782687983559989,0.12053680419921875,/kaggle/input/dias-multicp-k12/results/GFNet_MultiHead_best.keras
+GFNet_MultiHead,GFNet,SAPS,0.7078818465192223,0.9517589431497699,0.13369536119928105,1.0561884986810817,0.11401748657226562,/kaggle/input/dias-multicp-k12/results/GFNet_MultiHead_best.keras
+ViT_UNet_MultiHead,ViT UNet,RAPS,0.7010538815496512,0.9740876608918764,0.14509159050059275,1.170617756023956,0.13688278198242188,/kaggle/input/dias-multicp-k12/results/ViT_UNet_MultiHead_best.keras
+ViT_UNet_MultiHead,ViT UNet,SAPS,0.7041709959922814,0.9675353591043067,0.1426058357872194,1.1092983332446926,0.10757827758789062,/kaggle/input/dias-multicp-k12/results/ViT_UNet_MultiHead_best.keras

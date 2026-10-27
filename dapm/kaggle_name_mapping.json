@@ -1,0 +1,32 @@
+{
+  "project": "65-Band DIAS DAPM",
+  "timestamp": "2026-10-23",
+  "kernels": {
+    "dias-dapm-k24": {
+      "local_notebook": "Model_training_dapm_full.ipynb",
+      "obfuscated_file": "dias-dapm-k24.ipynb",
+      "kaggle_id": "daneshselwal/dias-dapm-k24"
+    },
+    "dias-dapm-uq-k25": {
+      "local_notebook": "Model_uncertainty_dapm_full.ipynb",
+      "obfuscated_file": "dias-dapm-uq-k25.ipynb",
+      "kaggle_id": "daneshselwal/dias-dapm-uq-k25"
+    },
+    "dias-dapm-cp-k26": {
+      "local_notebook": "Model_uncertainty_dapm_cp.ipynb",
+      "obfuscated_file": "dias-dapm-cp-k26.ipynb",
+      "kaggle_id": "daneshselwal/dias-dapm-cp-k26"
+    }
+  },
+  "datasets": {
+    "dias-dataset-k01": {
+      "k001.mat": "DIAS.mat",
+      "k002.mat": "DIAS_ref.mat"
+    },
+    "dias-baseline-models": {
+      "k005.keras": "AlexNet_CNN_best.keras",
+      "k006.keras": "GFNet_best.keras",
+      "k007.keras": "ViT_UNet_best.keras"
+    }
+  }
+}

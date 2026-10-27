@@ -44,69 +44,39 @@ This project was developed, orchestrated, and finalized over an intensive **8 da
 Check the `agent_rulebook.md` for strict contribution guidelines, including the Zero-Footprint memory policies and proper Google Drive staging protocols for this repository.
 
 ---
-
-## 📊 65-Band DIAS Benchmark Summary
-
-All values below are read directly from the committed result files (`*/results/classification_summary.csv`, `*/results/uncertainty_results/summary_metrics.csv`, `sacp/results/combined_summary_all_windows.csv`, `dapm/results/dapm_full_summary_metrics.csv`). Conformal results use α = 0.05 (95% target coverage); Split Conformal is shown for comparability.
-
-| Model | Test Accuracy | Split CP Coverage | Split CP Avg Set Size |
-| :--- | :---: | :---: | :---: |
-| Baseline — GFNet | 99.99% | 95.06% | 0.951 |
-| Baseline — AlexNet CNN | 99.93% | 95.09% | 0.951 |
-| Baseline — ViT-UNet | 99.93% | 94.78% | 0.948 |
-| DOFA — Hiera ViT | 100.00% | 95.58% | 0.956 |
-| DOFA — Hiera Fusion | 99.98% | 94.97% | 0.950 |
-| DOFA — Spectral | 83.91% | 95.13% | 1.523 |
-| GeoRSCLIP — TextHead | 100.00% | 94.75% | 0.947 |
-| MambaHSI — Base | 99.99% | 95.96% | 0.960 |
-| SpatialGCN | 97.05% | 95.24% | 0.965 |
-
-> Avg set size < 1 occurs because class-conditional/split thresholds can produce empty sets for a small fraction of pixels.
-
-**SACP (spatially aggregated CP, baseline backbones):** coverage 99.97–100% with avg set size 1.000–1.001 across window sizes 3/5/7/9 (see `sacp/results/combined_summary_all_windows.csv`).
-
-**DAPM (diffusion-based, t-test p < 0.05, 30 samples):** this is not a conformal method, so it reports a certainty rate rather than coverage.
-
-| DAPM Backbone | Labeled Accuracy | Certainty Rate | Uncertain Pixels |
-| :--- | :---: | :---: | :---: |
-| AlexNet CNN | 99.97% | 99.83% | 434 |
-| GFNet | 99.998% | 99.90% | 256 |
-| ViT-UNet | 99.96% | 99.95% | 122 |
-
----
-
 # 65 Bands DIAS Data - Directory & Kaggle Links
 
-Below is the directory structure mirroring our local repository, with direct links to the public notebooks on Kaggle:
+Below is the directory structure mirroring our local repository, with direct links to the public notebooks where applicable:
 
 * 📁 **baseline/**
-    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03) — `dias-baseline-k03` ✅ **COMPLETE**
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04) — `dias-uncertainty-k04` ✅ **COMPLETE**
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-baseline-k03)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-uncertainty-k04)
 * 📁 **credit/**
-    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015) — `dias-credit-k015` ✅ **COMPLETE**
+    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/dias-credit-k015)
 * 📁 **dapm/**
-    * 📓 [Model_training_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-k24) — `dias-dapm-k24` ✅ **COMPLETE** (120 epochs across 3 backbones)
-    * 📓 [Model_uncertainty_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-uq-k25) — `dias-dapm-uq-k25` ✅ **COMPLETE** (T-Test conformal bounds & Excel reports)
+    * 📓 [Model_training_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-k24)
+    * 📓 Model_uncertainty_dapm_cp.ipynb
+    * 📓 [Model_uncertainty_dapm_full.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dapm-uq-k25)
 * 📁 **data/**
 * 📁 **dofa/**
-    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-k18) — `dias-dofa-k18` ✅ **COMPLETE** (100.0% Acc)
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-uq-k19) — `dias-dofa-uq-k19` ✅ **COMPLETE** (95.15% Cov)
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-k18)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-dofa-uq-k19)
 * 📁 **ensemble/**
-    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13) — `dias-ensemble-k13`
-    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-crede-k014) — `dias-crede-k014` ✅ **COMPLETE**
+    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/dias-ensemble-k13)
+    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/dias-crede-k014)
 * 📁 **georsclip/**
-    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-k20) — `dias-georsclip-k20` ✅ **COMPLETE** (100.0% Acc)
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-uq-k21) — `dias-georsclip-uq-k21` ✅ **COMPLETE** (95.01% Cov)
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-k20)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-georsclip-uq-k21)
 * 📁 **mambahsi/**
-    * 📓 [Model_training_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-k16) — `dias-mambahsi-k16` ✅ **COMPLETE** (99.99% Acc)
-    * 📓 [Model_uncertainty_comparison_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-uq-k17) — `dias-mambahsi-uq-k17` ✅ **COMPLETE** (96.27% Cov)
+    * 📓 [Model_training_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-k16)
+    * 📓 [Model_uncertainty_comparison_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/dias-mambahsi-uq-k17)
 * 📁 **multicp/**
-    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12) — `dias-multicp-k12`
-    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k031) — `dias-multicp-sacp-k031`
+    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-k12)
+    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k031)
 * 📁 **multicp_sacp/**
-    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k044) — `dias-multicp-sacp-k044`
+    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/dias-multicp-sacp-k044)
 * 📁 **sacp/**
-    * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-sacp-k11) — `dias-sacp-k11` ✅ **COMPLETE**
+    * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-sacp-k11)
 * 📁 **spatialgcn/**
-    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-k22) — `dias-spatialgcn-k22` ✅ **COMPLETE** (97.05% Acc)
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-uq-k23) — `dias-spatialgcn-uq-k23` ✅ **COMPLETE** (95.40% Cov)
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-k22)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/dias-spatialgcn-uq-k23)

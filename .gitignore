@@ -1,12 +1,34 @@
-*.log
-*.py
-!scripts/*.py
-tests/
-*.h5
+# Model weights & binary files (exceeds GitHub 100MB limit)
 *.keras
+*.h5
 *.mat
-data/
-surveillance_log_dias.jsonl
-scripts/.trigger_state.json
+*.ckpt
+*.pt
+*.pth
+
+# OS & Python artifacts
+.DS_Store
+Thumbs.db
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Temporary & intermediate artifacts
+/tmp/
+data/
+kaggle_staging/
+dapm_full_artifacts/
+*.log
+surveillance_log_dias.jsonl
+scripts/.trigger_state.json
+
+# Explicitly ensure required deliverables are tracked
+!*.docx
+!*.csv
+!*.xlsx
+!*.png
+!*.ipynb
+!*.json
+!*.md
+!scripts/*.py

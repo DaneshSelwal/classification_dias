@@ -1,0 +1,386 @@
+[
+  {
+    "window_size": 3,
+    "model_name": "AlexNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      10996,
+      7861,
+      8296,
+      49077,
+      71826,
+      47259,
+      7777,
+      25045,
+      34007
+    ]
+  },
+  {
+    "window_size": 3,
+    "model_name": "AlexNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      3212,
+      2180,
+      1376,
+      10916,
+      14310,
+      9903,
+      709,
+      3924,
+      215614
+    ]
+  },
+  {
+    "window_size": 3,
+    "model_name": "GFNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      11402,
+      7411,
+      11092,
+      45830,
+      82358,
+      43648,
+      5171,
+      23664,
+      31568
+    ]
+  },
+  {
+    "window_size": 3,
+    "model_name": "GFNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      3318,
+      1960,
+      1862,
+      9379,
+      17951,
+      9384,
+      618,
+      3755,
+      213917
+    ]
+  },
+  {
+    "window_size": 3,
+    "model_name": "ViT",
+    "scoring_method": "RAPS",
+    "counts": [
+      11604,
+      7808,
+      6855,
+      40108,
+      81611,
+      44322,
+      4467,
+      21976,
+      43393
+    ]
+  },
+  {
+    "window_size": 3,
+    "model_name": "ViT",
+    "scoring_method": "SAPS",
+    "counts": [
+      11687,
+      7956,
+      7175,
+      41674,
+      85610,
+      46771,
+      5388,
+      24677,
+      31206
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "AlexNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      10915,
+      7721,
+      7213,
+      45722,
+      65713,
+      43566,
+      5166,
+      21155,
+      54973
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "AlexNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11029,
+      7980,
+      8190,
+      50746,
+      73859,
+      47982,
+      8077,
+      26195,
+      28086
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "GFNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      11292,
+      7332,
+      9928,
+      42977,
+      78403,
+      41266,
+      3968,
+      20941,
+      46037
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "GFNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11426,
+      7409,
+      10676,
+      46277,
+      83472,
+      44207,
+      5169,
+      24397,
+      29111
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "ViT",
+    "scoring_method": "RAPS",
+    "counts": [
+      11493,
+      7722,
+      6354,
+      38446,
+      78752,
+      41983,
+      3280,
+      19578,
+      54536
+    ]
+  },
+  {
+    "window_size": 5,
+    "model_name": "ViT",
+    "scoring_method": "SAPS",
+    "counts": [
+      11665,
+      7943,
+      6841,
+      40993,
+      84649,
+      46045,
+      4630,
+      23980,
+      35398
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "AlexNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      10776,
+      7487,
+      6128,
+      41805,
+      58311,
+      39239,
+      3261,
+      17279,
+      77858
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "AlexNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11025,
+      7965,
+      7661,
+      49828,
+      71973,
+      46521,
+      6792,
+      24877,
+      35502
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "GFNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      11202,
+      7266,
+      8970,
+      40234,
+      74859,
+      38996,
+      3096,
+      18582,
+      58939
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "GFNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11433,
+      7396,
+      10192,
+      45585,
+      82766,
+      43640,
+      4602,
+      23572,
+      32958
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "ViT",
+    "scoring_method": "RAPS",
+    "counts": [
+      11380,
+      7619,
+      5903,
+      36877,
+      75972,
+      39847,
+      2454,
+      17457,
+      64635
+    ]
+  },
+  {
+    "window_size": 7,
+    "model_name": "ViT",
+    "scoring_method": "SAPS",
+    "counts": [
+      11665,
+      7935,
+      6603,
+      40342,
+      83912,
+      45566,
+      3945,
+      23245,
+      38931
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "AlexNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      10623,
+      7307,
+      5537,
+      38939,
+      53912,
+      36763,
+      2348,
+      14988,
+      91727
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "AlexNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11021,
+      7965,
+      7172,
+      49103,
+      70496,
+      45293,
+      5627,
+      23477,
+      41990
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "GFNet",
+    "scoring_method": "RAPS",
+    "counts": [
+      11081,
+      7203,
+      8005,
+      37353,
+      71271,
+      36648,
+      2456,
+      16443,
+      71684
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "GFNet",
+    "scoring_method": "SAPS",
+    "counts": [
+      11421,
+      7349,
+      9689,
+      44706,
+      81842,
+      42943,
+      4107,
+      22500,
+      37587
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "ViT",
+    "scoring_method": "RAPS",
+    "counts": [
+      11234,
+      7475,
+      5500,
+      35023,
+      72527,
+      37417,
+      1763,
+      15323,
+      75882
+    ]
+  },
+  {
+    "window_size": 9,
+    "model_name": "ViT",
+    "scoring_method": "SAPS",
+    "counts": [
+      11656,
+      7903,
+      6386,
+      39713,
+      83205,
+      44863,
+      3311,
+      22443,
+      42664
+    ]
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "verdict": "APPROVE",
+  "ast_audit": {
+    "notebooks_audited": 3,
+    "total_cells": 132,
+    "code_cells": 59,
+    "markdown_cells": 73,
+    "ast_nodes_inspected": 35087,
+    "syntax_errors": [],
+    "unquoted_best_model_path_flags": [],
+    "tab20_occurrences": [],
+    "stale_path_flags": [],
+    "layer_signature_issues": []
+  },
+  "memory_stress": {
+    "initial_rss_mb": 495.859375,
+    "stages": {
+      "AlexNet_CNN_MultiHead": {
+        "rss_mb": 1113.234375,
+        "delta_mb": 617.375,
+        "num_heads": 7,
+        "output_shape": "(1, 8)",
+        "sum_head1": 0.9999999403953552
+      },
+      "GFNet_MultiHead": {
+        "rss_mb": 1519.65625,
+        "delta_mb": 406.421875,
+        "num_heads": 7,
+        "output_shape": "(1, 8)",
+        "sum_head1": 1.0
+      },
+      "ViT_UNet_MultiHead": {
+        "rss_mb": 1604.46875,
+        "delta_mb": 84.8125,
+        "num_heads": 7,
+        "output_shape": "(1, 8)",
+        "sum_head1": 1.0
+      }
+    },
+    "cross_talk_diffs": {
+      "AlexNet_CNN_MultiHead": 0.0,
+      "GFNet_MultiHead": 0.0
+    },
+    "interleaved_memory": [
+      {
+        "iteration": 1,
+        "rss_mb": 819.0
+      },
+      {
+        "iteration": 5,
+        "rss_mb": 819.734375
+      },
+      {
+        "iteration": 10,
+        "rss_mb": 820.546875
+      },
+      {
+        "iteration": 20,
+        "rss_mb": 823.296875
+      },
+      {
+        "iteration": 30,
+        "rss_mb": 823.875
+      }
+    ],
+    "gc_rss_mb": 692.28125,
+    "reverse_load_ok": true
+  }
+}

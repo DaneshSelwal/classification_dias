@@ -1,0 +1,32 @@
+{
+  "project": "65-Band DIAS MultiCP & MultiCP-SACP",
+  "timestamp": "2026-10-23",
+  "kernels": {
+    "dias-multicp-k12": {
+      "local_notebook": "multicp/Model_training_multihead.ipynb",
+      "obfuscated_file": "dias-multicp-k12.ipynb",
+      "kaggle_id": "daneshselwal/dias-multicp-k12"
+    },
+    "dias-multicp-sacp-k031": {
+      "local_notebook": "multicp/Model_uncertainty_multicp.ipynb",
+      "obfuscated_file": "dias-multicp-sacp-k031.ipynb",
+      "kaggle_id": "daneshselwal/dias-multicp-sacp-k031"
+    },
+    "dias-multicp-sacp-k044": {
+      "local_notebook": "multicp_sacp/Model_uncertainty_multicp_sacp.ipynb",
+      "obfuscated_file": "dias-multicp-sacp-k044.ipynb",
+      "kaggle_id": "daneshselwal/dias-multicp-sacp-k044"
+    }
+  },
+  "datasets": {
+    "dias-dataset-k01": {
+      "k001.mat": "DIAS.mat",
+      "k002.mat": "DIAS_ref.mat"
+    },
+    "dias-multicp-models": {
+      "k031.keras": "AlexNet_CNN_MultiHead_best.keras",
+      "k047.keras": "GFNet_MultiHead_best.keras",
+      "k051.keras": "ViT_UNet_MultiHead_best.keras"
+    }
+  }
+}

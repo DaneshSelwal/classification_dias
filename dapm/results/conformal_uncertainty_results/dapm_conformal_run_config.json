@@ -1,0 +1,22 @@
+{
+  "seed": 42,
+  "data_file": "/kaggle/input/datasets/daneshselwal/dias-dataset-k01/k001.mat",
+  "label_file": "/kaggle/input/datasets/daneshselwal/dias-dataset-k01/k002.mat",
+  "model_dir": "/kaggle/input",
+  "dapm_dir": "/kaggle/input/notebooks/daneshselwal/dias-dapm-k24/Classification/dapm/dapm_full_artifacts",
+  "output_dir": "/kaggle/working/Classification/dapm/results/conformal_uncertainty_results",
+  "results_dir": "/kaggle/working/Classification/dapm/results",
+  "h": 512,
+  "w": 512,
+  "b": 65,
+  "patch_size": 9,
+  "train_percent": 0.75,
+  "calib_fraction_of_test": 0.5,
+  "alpha": 0.05,
+  "raps_lam": 0.01,
+  "raps_k_reg": 1,
+  "n_clusters": 4,
+  "batch_size": 128,
+  "probability_source": "DAPM encoder(z_mu) -> classifier (no diffusion sampling)",
+  "timestamp_utc": "2026-10-23T07:56:53.070739+00:00"
+}
