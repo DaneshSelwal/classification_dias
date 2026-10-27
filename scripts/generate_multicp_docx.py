@@ -338,14 +338,67 @@ def generate_multicp_docx():
         "All models were trained on NVIDIA Tesla GPUs using Adam optimizer with categorical cross-entropy loss."
     )
 
+    # =========================================================================
+    # DYNAMIC DATA LOADING (Ground Truth Results from multicp/results/)
+    # =========================================================================
+    # 1. Multi-head Training Results
+    wb_train = openpyxl.load_workbook(os.path.join(RESULTS_DIR, "model_training_multihead_results.xlsx"), data_only=True)
+    ws_summary = wb_train["Summary"]
+    train_summary = {}
+    for r in list(ws_summary.iter_rows(values_only=True))[1:]:
+        train_summary[r[0]] = {
+            "test_accuracy": r[5],
+            "cohen_kappa": r[6],
+            "training_time_sec": r[7],
+            "total_params": r[8]
+        }
+    f1_metrics = {}
+    for m_key in ["AlexNet_CNN_MultiHead", "GFNet_MultiHead", "ViT_UNet_MultiHead"]:
+        ws_m = wb_train[m_key]
+        macro_f1, weighted_f1 = None, None
+        for r in ws_m.iter_rows(values_only=True):
+            if r[0] == "macro avg":
+                macro_f1 = r[3]
+            elif r[0] == "weighted avg":
+                weighted_f1 = r[3]
+        f1_metrics[m_key] = {"macro_f1": macro_f1, "weighted_f1": weighted_f1}
+
+    # 2. MultiCP Summary CSV
+    df_summary = pd.read_csv(os.path.join(RESULTS_DIR, "multicp_summary.csv"))
+
+    # 3. MultiCP Per-Class CSV
+    df_per_class = pd.read_csv(os.path.join(RESULTS_DIR, "multicp_per_class.csv"))
+    piv_pc = df_per_class.pivot(index="Class", columns=["model_name", "scoring_method"], values="Coverage")
+
+    # 4. MultiCP Head Sweep CSV
+    df_hs = pd.read_csv(os.path.join(RESULTS_DIR, "multicp_head_sweep.csv"))
+
+    # 5. MultiCP Pixel Counts JSON
+    with open(os.path.join(RESULTS_DIR, "multicp_pixel_counts.json")) as f:
+        pixel_counts_raw = json.load(f)
+    pc_map = {item["model_key"]: item["counts"] for item in pixel_counts_raw}
+
     # TABLE I-A
     add_table_caption(doc, "TABLE I-A", "MULTI-HEAD BACKBONE TRAINING AND TEST CLASSIFICATION SUMMARY (13,474 TEST SAMPLES)")
     t1a_headers = ["Model", "Test Acc (%)", "Cohen’s κ", "Macro F1", "Weighted F1", "Total Params", "Train Time (s)"]
-    t1a_data = [
-        ["GFNet MultiHead", "100.000%", "1.0000", "1.0000", "1.0000", "25,580,304", "3,140.5"],
-        ["AlexNet-CNN MultiHead", "99.948%", "0.9994", "0.9990", "0.9995", "34,061,592", "1,263.7"],
-        ["ViT-UNet MultiHead", "99.458%", "0.9935", "0.9912", "0.9946", "16,316,944", "2,901.4"]
+    t1a_models = [
+        ("GFNet_MultiHead", "GFNet MultiHead"),
+        ("AlexNet_CNN_MultiHead", "AlexNet-CNN MultiHead"),
+        ("ViT_UNet_MultiHead", "ViT-UNet MultiHead")
     ]
+    t1a_data = []
+    for m_key, m_disp in t1a_models:
+        s = train_summary[m_key]
+        f = f1_metrics[m_key]
+        t1a_data.append([
+            m_disp,
+            f"{s['test_accuracy'] * 100:.3f}%",
+            f"{s['cohen_kappa']:.4f}",
+            f"{f['macro_f1']:.4f}",
+            f"{f['weighted_f1']:.4f}",
+            f"{s['total_params']:,d}",
+            f"{s['training_time_sec']:,.1f}"
+        ])
     build_data_table(doc, t1a_headers, t1a_data, [1.5, 0.8, 0.8, 0.8, 0.8, 1.0, 0.8])
 
     add_heading_2(doc, "B. Nonconformity Score Functions (RAPS and SAPS) and MultiCP Intersection")
@@ -371,20 +424,39 @@ def generate_multicp_docx():
     # TABLE I
     add_table_caption(doc, "TABLE I", "MULTICP AGGREGATE SUMMARY — RAPS SCORING (α = 0.05, H = 7 HEADS)")
     t1_headers = ["Model", "Emp. Cov.", "Avg Set Size", "Singleton Rate", "Empty Set Rate", "Scene Cov.", "Uncertain Px Rate"]
-    t1_data = [
-        ["AlexNet", "0.7073", "0.9525", "0.9525", "0.0475", "0.1277", "0.1100"],
-        ["GFNet", "0.6800", "0.9466", "0.9466", "0.0534", "0.1307", "0.1205"],
-        ["ViT-UNet", "0.7011", "0.9741", "0.9741", "0.0259", "0.1451", "0.1369"]
+    summary_models = [
+        ("AlexNet CNN", "AlexNet"),
+        ("GFNet", "GFNet"),
+        ("ViT UNet", "ViT-UNet")
     ]
+    t1_data = []
+    for m_name, m_disp in summary_models:
+        sub = df_summary[(df_summary["model_name"] == m_name) & (df_summary["scoring_method"] == "RAPS")].iloc[0]
+        t1_data.append([
+            m_disp,
+            f"{sub['empirical_coverage']:.4f}",
+            f"{sub['avg_set_size']:.4f}",
+            f"{sub['avg_set_size']:.4f}",
+            f"{1.0 - sub['avg_set_size']:.4f}",
+            f"{sub['scene_coverage']:.4f}",
+            f"{sub['uncertain_pixel_rate']:.4f}"
+        ])
     build_data_table(doc, t1_headers, t1_data, [1.3, 0.85, 0.85, 0.95, 0.95, 0.8, 0.8])
 
     # TABLE II
     add_table_caption(doc, "TABLE II", "MULTICP AGGREGATE SUMMARY — SAPS SCORING (α = 0.05, H = 7 HEADS)")
-    t2_data = [
-        ["AlexNet", "0.7024", "0.9525", "0.9525", "0.0475", "0.1258", "0.1088"],
-        ["GFNet", "0.7079", "0.9518", "0.9518", "0.0482", "0.1337", "0.1140"],
-        ["ViT-UNet", "0.7042", "0.9675", "0.9675", "0.0325", "0.1426", "0.1076"]
-    ]
+    t2_data = []
+    for m_name, m_disp in summary_models:
+        sub = df_summary[(df_summary["model_name"] == m_name) & (df_summary["scoring_method"] == "SAPS")].iloc[0]
+        t2_data.append([
+            m_disp,
+            f"{sub['empirical_coverage']:.4f}",
+            f"{sub['avg_set_size']:.4f}",
+            f"{sub['avg_set_size']:.4f}",
+            f"{1.0 - sub['avg_set_size']:.4f}",
+            f"{sub['scene_coverage']:.4f}",
+            f"{sub['uncertain_pixel_rate']:.4f}"
+        ])
     build_data_table(doc, t1_headers, t2_data, [1.3, 0.85, 0.85, 0.95, 0.95, 0.8, 0.8])
 
     # B. Per-Class Coverage Analysis
@@ -400,32 +472,22 @@ def generate_multicp_docx():
     # TABLE III
     add_table_caption(doc, "TABLE III", "MULTICP (RAPS): PER-CLASS COVERAGE COMPARISON ACROSS MODELS (α = 0.05, H = 7)")
     t3_headers = ["Class", "AlexNet Coverage", "GFNet Coverage", "ViT-UNet Coverage"]
-    t3_data = [
-        ["Class 0", "0.6974", "0.6702", "0.6678"],
-        ["Class 1", "0.7202", "0.6818", "0.6932"],
-        ["Class 2", "0.7491", "0.6396", "0.6572"],
-        ["Class 3", "0.7070", "0.6777", "0.6952"],
-        ["Class 4", "0.7063", "0.6912", "0.7069"],
-        ["Class 5", "0.7063", "0.6941", "0.7309"],
-        ["Class 6", "0.7300", "0.6350", "0.7400"],
-        ["Class 7", "0.6750", "0.6844", "0.7562"],
-        ["Mean", "0.7114", "0.6717", "0.7059"]
-    ]
+    cols_raps = [("AlexNet CNN", "RAPS"), ("GFNet", "RAPS"), ("ViT UNet", "RAPS")]
+    t3_data = []
+    for c_idx in range(8):
+        c_lbl = f"Class {c_idx}"
+        t3_data.append([c_lbl] + [f"{piv_pc.loc[c_lbl, col]:.4f}" for col in cols_raps])
+    t3_data.append(["Mean"] + [f"{piv_pc[col].mean():.4f}" for col in cols_raps])
     build_data_table(doc, t3_headers, t3_data, [1.8, 1.5, 1.5, 1.7])
 
     # TABLE IV
     add_table_caption(doc, "TABLE IV", "MULTICP (SAPS): PER-CLASS COVERAGE COMPARISON ACROSS MODELS (α = 0.05, H = 7)")
-    t4_data = [
-        ["Class 0", "0.7113", "0.7105", "0.7031"],
-        ["Class 1", "0.6889", "0.7244", "0.7173"],
-        ["Class 2", "0.6784", "0.6890", "0.7032"],
-        ["Class 3", "0.6967", "0.7033", "0.6989"],
-        ["Class 4", "0.6987", "0.7245", "0.6868"],
-        ["Class 5", "0.7082", "0.6893", "0.7054"],
-        ["Class 6", "0.7400", "0.7100", "0.7300"],
-        ["Class 7", "0.7188", "0.6750", "0.7688"],
-        ["Mean", "0.7051", "0.7033", "0.7142"]
-    ]
+    cols_saps = [("AlexNet CNN", "SAPS"), ("GFNet", "SAPS"), ("ViT UNet", "SAPS")]
+    t4_data = []
+    for c_idx in range(8):
+        c_lbl = f"Class {c_idx}"
+        t4_data.append([c_lbl] + [f"{piv_pc.loc[c_lbl, col]:.4f}" for col in cols_saps])
+    t4_data.append(["Mean"] + [f"{piv_pc[col].mean():.4f}" for col in cols_saps])
     build_data_table(doc, t3_headers, t4_data, [1.8, 1.5, 1.5, 1.7])
 
     # C. Head Sweep Analysis
@@ -441,28 +503,26 @@ def generate_multicp_docx():
     # TABLE V
     add_table_caption(doc, "TABLE V", "MULTICP (RAPS): PROGRESSIVE HEAD INTERSECTION SWEEP TRAJECTORY (H = 1..7)")
     t5_headers = ["Heads", "AlexNet Cov.", "AlexNet Set Sz", "GFNet Cov.", "GFNet Set Sz", "ViT Cov.", "ViT Set Sz"]
-    t5_data = [
-        ["1", "0.9480", "0.9492", "0.9412", "0.9412", "0.9573", "0.9816"],
-        ["2", "0.9038", "0.9524", "0.8943", "0.9455", "0.9151", "0.9801"],
-        ["3", "0.8568", "0.9513", "0.8434", "0.9444", "0.8663", "0.9768"],
-        ["4", "0.8185", "0.9526", "0.8008", "0.9459", "0.8268", "0.9772"],
-        ["5", "0.7760", "0.9517", "0.7615", "0.9468", "0.7809", "0.9755"],
-        ["6", "0.7386", "0.9518", "0.7183", "0.9464", "0.7367", "0.9740"],
-        ["7", "0.7073", "0.9525", "0.6800", "0.9466", "0.7011", "0.9741"]
-    ]
+    keys_raps = ["AlexNet_CN_RAPS", "GFNet_Mult_RAPS", "ViT_UNet_M_RAPS"]
+    t5_data = []
+    for h in range(1, 8):
+        row = [str(h)]
+        for k in keys_raps:
+            sub = df_hs[(df_hs["model_key"] == k) & (df_hs["heads"] == h)].iloc[0]
+            row.extend([f"{sub['coverage']:.4f}", f"{sub['set_size']:.4f}"])
+        t5_data.append(row)
     build_data_table(doc, t5_headers, t5_data, [0.8, 0.95, 0.95, 0.95, 0.95, 0.95, 0.95])
 
     # TABLE VI
     add_table_caption(doc, "TABLE VI", "MULTICP (SAPS): PROGRESSIVE HEAD INTERSECTION SWEEP TRAJECTORY (H = 1..7)")
-    t6_data = [
-        ["1", "0.9546", "0.9556", "0.9521", "0.9522", "0.9543", "0.9712"],
-        ["2", "0.9074", "0.9536", "0.8994", "0.9482", "0.9089", "0.9694"],
-        ["3", "0.8608", "0.9527", "0.8542", "0.9485", "0.8627", "0.9679"],
-        ["4", "0.8153", "0.9519", "0.8112", "0.9488", "0.8210", "0.9675"],
-        ["5", "0.7720", "0.9513", "0.7677", "0.9486", "0.7775", "0.9671"],
-        ["6", "0.7349", "0.9514", "0.7345", "0.9500", "0.7407", "0.9676"],
-        ["7", "0.7024", "0.9525", "0.7079", "0.9518", "0.7042", "0.9675"]
-    ]
+    keys_saps = ["AlexNet_CN_SAPS", "GFNet_Mult_SAPS", "ViT_UNet_M_SAPS"]
+    t6_data = []
+    for h in range(1, 8):
+        row = [str(h)]
+        for k in keys_saps:
+            sub = df_hs[(df_hs["model_key"] == k) & (df_hs["heads"] == h)].iloc[0]
+            row.extend([f"{sub['coverage']:.4f}", f"{sub['set_size']:.4f}"])
+        t6_data.append(row)
     build_data_table(doc, t5_headers, t6_data, [0.8, 0.95, 0.95, 0.95, 0.95, 0.95, 0.95])
 
     # D. Pixel Count Distribution and RAPS vs. SAPS Comparison
@@ -478,47 +538,73 @@ def generate_multicp_docx():
     # TABLE VII
     add_table_caption(doc, "TABLE VII", "FULL-SCENE PREDICTED PIXEL COUNT DISTRIBUTION (RAPS, α = 0.05, 262,144 PIXELS)")
     t7_headers = ["Class / Region", "AlexNet Pixels", "GFNet Pixels", "ViT-UNet Pixels"]
-    t7_data = [
-        ["Class 0", "11,022", "11,418", "11,710"],
-        ["Class 1", "7,954", "7,396", "8,000"],
-        ["Class 2", "8,466", "10,929", "7,065"],
-        ["Class 3", "49,734", "45,061", "40,537"],
-        ["Class 4", "72,900", "81,847", "83,229"],
-        ["Class 5", "47,964", "44,005", "46,194"],
-        ["Class 6", "8,892", "5,672", "5,783"],
-        ["Class 7", "26,364", "24,218", "23,743"],
-        ["Uncertain", "28,848", "31,598", "35,883"],
-        ["Total (Scene)", "262,144", "262,144", "262,144"]
-    ]
+    t7_data = []
+    for c_idx in range(8):
+        t7_data.append([f"Class {c_idx}"] + [f"{pc_map[k][c_idx]:,d}" for k in keys_raps])
+    t7_data.append(["Uncertain"] + [f"{pc_map[k][8]:,d}" for k in keys_raps])
+    t7_data.append(["Total (Scene)"] + [f"{sum(pc_map[k]):,d}" for k in keys_raps])
     build_data_table(doc, t7_headers, t7_data, [1.8, 1.5, 1.5, 1.7])
 
     # TABLE VIII
     add_table_caption(doc, "TABLE VIII", "FULL-SCENE PREDICTED PIXEL COUNT DISTRIBUTION (SAPS, α = 0.05, 262,144 PIXELS)")
-    t8_data = [
-        ["Class 0", "11,013", "11,420", "11,702"],
-        ["Class 1", "7,962", "7,400", "8,019"],
-        ["Class 2", "8,430", "10,987", "7,388"],
-        ["Class 3", "49,974", "45,440", "41,956"],
-        ["Class 4", "73,040", "82,376", "85,954"],
-        ["Class 5", "48,008", "44,289", "47,354"],
-        ["Class 6", "8,927", "5,812", "6,375"],
-        ["Class 7", "26,275", "24,531", "25,195"],
-        ["Uncertain", "28,515", "29,889", "28,201"],
-        ["Total (Scene)", "262,144", "262,144", "262,144"]
-    ]
+    t8_data = []
+    for c_idx in range(8):
+        t8_data.append([f"Class {c_idx}"] + [f"{pc_map[k][c_idx]:,d}" for k in keys_saps])
+    t8_data.append(["Uncertain"] + [f"{pc_map[k][8]:,d}" for k in keys_saps])
+    t8_data.append(["Total (Scene)"] + [f"{sum(pc_map[k]):,d}" for k in keys_saps])
     build_data_table(doc, t7_headers, t8_data, [1.8, 1.5, 1.5, 1.7])
 
     # TABLE IX
     add_table_caption(doc, "TABLE IX", "COMPREHENSIVE SYNTHESIS AND RAPS VS. SAPS COMPARISON ACROSS ALL 3 MULTI-HEAD ARCHITECTURES")
     t9_headers = ["Model", "Score Fn", "Emp. Cov.", "Avg Set Sz", "Scene Cov.", "Uncertain Px", "Uncert. Rate", "Best?"]
-    t9_data = [
-        ["AlexNet", "RAPS", "0.7073", "0.9525", "0.1277", "28,848", "0.1100", ""],
-        ["AlexNet", "SAPS", "0.7024", "0.9525", "0.1258", "28,515", "0.1088", ""],
-        ["GFNet", "RAPS", "0.6800", "0.9466", "0.1307", "31,598", "0.1205", ""],
-        ["GFNet", "SAPS", "0.7079", "0.9518", "0.1337", "29,889", "0.1140", "✓ (Max Joint Cov.)"],
-        ["ViT-UNet", "RAPS", "0.7011", "0.9741", "0.1451", "35,883", "0.1369", "✓ (Max Scene Cov.)"],
-        ["ViT-UNet", "SAPS", "0.7042", "0.9675", "0.1426", "28,201", "0.1076", "✓ (Min Unc. Rate)"]
+    t9_configs = [
+        ("AlexNet CNN", "AlexNet", "RAPS"),
+        ("AlexNet CNN", "AlexNet", "SAPS"),
+        ("GFNet", "GFNet", "RAPS"),
+        ("GFNet", "GFNet", "SAPS"),
+        ("ViT UNet", "ViT-UNet", "RAPS"),
+        ("ViT UNet", "ViT-UNet", "SAPS")
     ]
+    model_key_mapping = {
+        ("AlexNet CNN", "RAPS"): "AlexNet_CN_RAPS",
+        ("AlexNet CNN", "SAPS"): "AlexNet_CN_SAPS",
+        ("GFNet", "RAPS"): "GFNet_Mult_RAPS",
+        ("GFNet", "SAPS"): "GFNet_Mult_SAPS",
+        ("ViT UNet", "RAPS"): "ViT_UNet_M_RAPS",
+        ("ViT UNet", "SAPS"): "ViT_UNet_M_SAPS",
+    }
+    max_cov_idx = df_summary["empirical_coverage"].idxmax()
+    best_cov_pair = (df_summary.loc[max_cov_idx, "model_name"], df_summary.loc[max_cov_idx, "scoring_method"])
+    max_scene_idx = df_summary["scene_coverage"].idxmax()
+    best_scene_pair = (df_summary.loc[max_scene_idx, "model_name"], df_summary.loc[max_scene_idx, "scoring_method"])
+    min_unc_idx = df_summary["uncertain_pixel_rate"].idxmin()
+    best_unc_pair = (df_summary.loc[min_unc_idx, "model_name"], df_summary.loc[min_unc_idx, "scoring_method"])
+
+    t9_data = []
+    for m_name, m_disp, score in t9_configs:
+        sub = df_summary[(df_summary["model_name"] == m_name) & (df_summary["scoring_method"] == score)].iloc[0]
+        mk = model_key_mapping[(m_name, score)]
+        unc_px = pc_map[mk][8]
+        
+        notes = []
+        if (m_name, score) == best_cov_pair:
+            notes.append("✓ (Max Joint Cov.)")
+        if (m_name, score) == best_scene_pair:
+            notes.append("✓ (Max Scene Cov.)")
+        if (m_name, score) == best_unc_pair:
+            notes.append("✓ (Min Unc. Rate)")
+        best_str = " ".join(notes)
+        
+        t9_data.append([
+            m_disp,
+            score,
+            f"{sub['empirical_coverage']:.4f}",
+            f"{sub['avg_set_size']:.4f}",
+            f"{sub['scene_coverage']:.4f}",
+            f"{unc_px:,d}",
+            f"{sub['uncertain_pixel_rate']:.4f}",
+            best_str
+        ])
     build_data_table(doc, t9_headers, t9_data, [1.1, 0.8, 0.85, 0.85, 0.85, 1.0, 0.85, 1.2])
 
     # E. Spatialised Uncertainty Maps — RAPS
