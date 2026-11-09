@@ -1,0 +1,4 @@
+Model,Class_1_Coverage,Class_2_Coverage,Class_3_Coverage,Class_4_Coverage,Class_5_Coverage,Class_6_Coverage,Class_7_Coverage,Class_8_Coverage
+AlexNet_CNN_CreDE,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+GFNet_CreDE,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+ViT_UNet_CreDE,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0

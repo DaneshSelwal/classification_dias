@@ -1,0 +1,4 @@
+Model,N_Test_Pixels,Overall_Empirical_Coverage,Average_Set_Size,Mean_Class_Coverage
+AlexNet_CNN_CreDE,13474,1.0,1.0092029093068131,1.0
+GFNet_CreDE,13474,1.0,1.0,1.0
+ViT_UNet_CreDE,13474,1.0,1.0023007273267033,1.0
