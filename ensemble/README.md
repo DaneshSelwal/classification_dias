@@ -2,8 +2,11 @@
 
 [← back to main README](../README.md) · related: [CREDIT](../credit/README.md)
 
-> **In one sentence:** train the same network five times with different random seeds, and read
-> uncertainty from **how much the five copies disagree** and **how unsure each one is**.
+| | |
+|---|---|
+| **What** | Train each backbone five times (seeds 43–47) and read uncertainty from **how much the five copies disagree** (epistemic) and **how unsure their cautious consensus is** (aleatoric) |
+| **Key result** | Credal sets are single correct classes on labelled test pixels (coverage 1.000); over the **whole scene** the members disagree far more (mean EU 0.05–0.10) |
+| **The lesson** | The ensemble's disagreement is a detector of *surfaces the model was never taught*, which a test-set metric cannot reveal |
 
 | Notebook | What it does |
 |---|---|
@@ -68,7 +71,7 @@ fixed thresholds AU > 0.5, EU > 0.2, TU > 0.7.
 
 ## 3. Results
 
-### 3.1 Members
+### 3.1 Members: are the five copies really different?
 
 All 15 members are near-perfect; GFNet members reach 100.00% test accuracy.
 
@@ -78,9 +81,13 @@ All 15 members are near-perfect; GFNet members reach 100.00% test accuracy.
 | GFNet | 100.00% × 5 |
 | ViT-UNet | 99.97%, 99.97%, 99.96%, 99.96%, 99.94% |
 
-*Source: [`results/classification_summary.csv`](results/classification_summary.csv).*
+*__Table 1.__ Source: [`results/classification_summary.csv`](results/classification_summary.csv).*
 
-### 3.2 Credal uncertainty
+**Reading Table 1.** The AlexNet members spread over 0.34 points (99.61–99.95%). The GFNet members are
+identical in accuracy. An ensemble is only informative where its members *can* differ, so on labelled
+pixels there is little room for disagreement. The interesting differences appear elsewhere (§3.2).
+
+### 3.2 Credal uncertainty: labelled pixels vs the whole scene
 
 | Ensemble | Mean AU | Mean EU | Mean TU | Credal coverage | Avg. set size |
 |---|--:|--:|--:|--:|--:|
@@ -92,17 +99,29 @@ All 15 members are near-perfect; GFNet members reach 100.00% test accuracy.
 **all 262,144 scene pixels**) and [`results/CreDE_Credal_Coverage_Overall.csv`](results/CreDE_Credal_Coverage_Overall.csv)
 (coverage, on the **13,474 labelled test pixels**).*
 
+> ⚠️ Table 2 deliberately mixes two pixel sets: AU/EU/TU over the whole scene, coverage over labelled
+> test pixels. Figure 1 puts the scene-wide AU/EU next to the same quantity on labelled pixels, as learned
+> by the [CREDIT](../credit/README.md) student.
+
 <p align="center"><img src="../docs/figures/uncertainty/credal_au_eu.png" width="95%" alt="AU and EU, CREDIT vs CreDE"></p>
 
-**Reading it.**
+*__Figure 1.__ Mean aleatoric (AU) and epistemic (EU) uncertainty on labelled test pixels (CREDIT
+student) vs the whole scene (CreDE ensemble). Log scale: each grid line is a factor of 10.*
+
+**Reading Table 2 and Figure 1.**
 - On labelled test pixels the credal sets are essentially always a single correct class (coverage 100%,
   size ≈ 1.00).
 - Over the **whole scene**, including the 79% of pixels that were never labelled, the members disagree much
   more. AlexNet's mean EU is 0.10 and ViT's AU 0.67, so the ensemble "knows" it has not seen those
   surfaces. This is the most honest signal in the project about how the models behave **off** the training
   distribution.
+- The gap is not small. Scene-wide EU is **300–25,000× larger** than on labelled pixels. The labelled
+  pixels are where the members were trained to agree.
 - ViT-UNet has the highest AU because its softmax outputs are less peaked (its NLL is also the highest of
   the three).
+
+> **Takeaway.** Ensembles are cheap to explain and expensive to run (5× inference). On this scene their
+> value lies entirely off the labels: the EU map points at surfaces that need labelling next.
 
 ### 3.3 Maps
 
@@ -110,7 +129,11 @@ All 15 members are near-perfect; GFNet members reach 100.00% test accuracy.
 |:-:|:-:|:-:|
 | <img src="results/AlexNet_CNN_CreDE_spatial_maps.png" alt="AlexNet CreDE maps"> | <img src="results/GFNet_CreDE_spatial_maps.png" alt="GFNet CreDE maps"> | <img src="results/ViT_UNet_CreDE_spatial_maps.png" alt="ViT CreDE maps"> |
 
-Each panel shows the base prediction, binary AU/EU/TU masks, grey overlays and per-class pixel counts.
+*__Figure 2.__ CreDE maps per backbone: the base prediction, binary AU/EU/TU masks (AU > 0.5, EU > 0.2,
+TU > 0.7), grey overlays and per-class pixel counts.*
+
+**Reading Figure 2.** The EU masks highlight unlabelled surfaces and parcel edges. Labelled parcel
+interiors stay clear, consistent with Figure 1.
 
 ---
 

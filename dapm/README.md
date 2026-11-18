@@ -2,9 +2,11 @@
 
 [← back to main README](../README.md)
 
-> **In one sentence:** DAPM learns a compact latent description of each pixel that looks the same for
-> labelled and unlabelled land, then lets a **diffusion model re-imagine the class label 30 times**. If the
-> top two classes are statistically tied across those 30 draws, the pixel is flagged uncertain.
+| | |
+|---|---|
+| **What** | Learn a latent code per pixel that looks the same for labelled and unlabelled land, then let a **diffusion model re-imagine the class label 30 times**. A Welch t-test asks whether the top two classes are really different |
+| **Key result** | The most decisive method in the project: only **122–434 pixels (0.05–0.17% of the scene)** are flagged, scattered at random rather than along field edges |
+| **The lesson** | With 30 samples almost any consistent gap is "significant". A t-test p-value measures sample size as much as ambiguity. The CP layer on DAPM behaves like the baseline |
 
 | Notebook | What it does |
 |---|---|
@@ -92,16 +94,21 @@ cached as `results/dapm_full/chunk_outputs/*.npz`.
 | GFNet | 99.998% | **256** | 0.10% | 0.165 | 8.6 min |
 | ViT-UNet | 99.96% | **122** | 0.05% | 0.171 | 9.0 min |
 
-*Source: [`results/dapm_full_summary_metrics.csv`](results/dapm_full_summary_metrics.csv). Accuracy here is
+*__Table 1.__ Source: [`results/dapm_full_summary_metrics.csv`](results/dapm_full_summary_metrics.csv). Accuracy here is
 over **all** labelled pixels, including those used in training.*
 
 <p align="center"><img src="../docs/figures/uncertainty/dapm_uncertain_pixels.png" width="70%" alt="DAPM uncertain pixel counts"></p>
+
+*__Figure 1.__ Pixels flagged uncertain (p > 0.05) per backbone, out of 262,144.*
 
 | Certain vs uncertain (AlexNet) | Class map + uncertain mask (AlexNet) | p-value distribution |
 |:-:|:-:|:-:|
 | <img src="results/AlexNet_CNN_Certain_vs_Uncertain_Map.png" alt="certain uncertain"> | <img src="results/AlexNet_CNN_Class___Uncertain_Mask.png" alt="class mask"> | <img src="results/AlexNet_CNN_P-Value_Distribution.png" alt="p values"> |
 
-**Reading it.** DAPM is the most *decisive* method in the project: fewer than 1 pixel in 500 is flagged, and
+*__Figure 2.__ AlexNet-CNN: certain/uncertain map, class map with the uncertain mask, and the distribution
+of the 262,144 p-values.*
+
+**Reading Table 1 and Figures 1–2.** DAPM is the most *decisive* method in the project: fewer than 1 pixel in 500 is flagged, and
 the median p-value is 0. The mean probability gap between the top two classes is only ~0.16 because
 diffusion samples are soft. But with 30 samples even a small, consistent gap is statistically clear.
 
@@ -110,7 +117,20 @@ diffusion samples are soft. But with 30 samples even a small, consistent gap is 
 unlabelled land or any one class. That pattern is what random sampling noise looks like, not real
 ambiguity. So on this data DAPM's t-test mostly reports **"certain everywhere"**, and the handful of
 flags should not be read as meaningful doubt. Compare the conformal maps in
-[baseline/](../baseline/README.md#43-maps), where uncertainty clearly follows field edges.
+[baseline/](../baseline/README.md#53-where-on-the-map-is-the-uncertainty), where uncertainty clearly follows field edges.
+
+**Why so few?** Welch's t-statistic grows with $`\sqrt{n}`$. For example, with n = 30 samples per class, a gap of 0.16 in
+mean probability with a sample spread of about 0.2 already gives t ≈ 3.1 and p ≈ 0.003. Only pixels whose
+top two classes are almost exactly tied survive. More samples would make DAPM flag *fewer* pixels, not
+more: the rule measures sample size as much as ambiguity.
+
+<p align="center"><img src="../docs/figures/uncertainty/flagged_share_by_method.png" width="90%" alt="Flagged share by method"></p>
+
+*__Figure 3.__ DAPM's 0.05–0.17% against the other methods' 10–35% (log scale).*
+
+> **Takeaway.** To make DAPM's uncertainty useful, replace the significance test with a calibrated rule.
+> For example, feed the 30-sample mean probabilities to a conformal method (§3.2), or flag pixels whose
+> sample spread exceeds a threshold calibrated on held-out pixels.
 
 ### 3.2 Conformal prediction on DAPM probabilities
 
@@ -120,11 +140,11 @@ flags should not be read as meaningful doubt. Compare the conformal maps in
 | GFNet | 0.9473 | 0.9519 | 0.9482 | 0.9567 | 1.0000 |
 | ViT | 0.9516 | 0.9595 | 0.9558 | 0.9619 | 0.9996 |
 
-*Empirical coverage at a 95% target. Source:
+*__Table 2.__ Empirical coverage at a 95% target. Source:
 [`results/conformal_uncertainty_results/dapm_conformal_summary_metrics.csv`](results/conformal_uncertainty_results/dapm_conformal_summary_metrics.csv).
 Clustered CP uses DAPM's latent mean $`\mu`$ as the embedding.*
 
-The pattern matches the [baseline](../baseline/README.md#41-coverage-and-set-size): all methods except RAPS
+The pattern matches the [baseline](../baseline/README.md#51-does-each-method-keep-its-95-promise): all methods except RAPS
 sit near 95%, with ~4–5% empty sets and no multi-class sets. Split CP's mean per-class coverage drops to
 0.86–0.91, so class-aware methods matter again.
 
@@ -138,7 +158,7 @@ sit near 95%, with ~4–5% empty sets and no multi-class sets. Split CP's mean p
 - "Target domain" = unlabelled pixels of the **same scene**, not a different sensor or date, so this is
   domain alignment in a mild sense.
 - Inherits the random-split optimism and, for AlexNet's CP results, the seed-10/seed-42 overlap
-  ([main README §8](../README.md#8-limitations-read-this-before-citing-a-number)).
+  ([main README §8](../README.md#10-limitations-and-threats-to-validity)).
 
 ## References
 

@@ -2,9 +2,12 @@
 
 [← back to main README](../README.md) · spatial version: [multicp_sacp/](../multicp_sacp/README.md)
 
-> **In one sentence:** one network grows **seven output heads**, each head gets its own conformal
-> threshold, and a class is kept only if **all seven heads accept it**. The idea is sound; as implemented,
-> the seven 95% promises multiply, and joint coverage falls to about **0.95⁷ ≈ 70%**.
+| | |
+|---|---|
+| **What** | One network with **seven output heads**; each head gets its own conformal threshold, and a class is kept only if **all seven accept it** |
+| **Key result** | Joint coverage **0.68–0.71** instead of 0.95, falling by about 5 points per extra head, exactly as **0.95ᴷ** predicts |
+| **The lesson** | Independently calibrated guarantees multiply. Intersecting K sets needs a per-head budget of α/K, or joint calibration |
+| **Map caveat** | The maps flag a fixed top 10% of pixels, and a leftover rule greys out real class-7 parcels |
 
 | Notebook | What it does |
 |---|---|
@@ -71,7 +74,12 @@ joint 7-dimensional score space to reach 95% **jointly**.
 
 ### 3.1 Head sweep: the key figure
 
+**Question.** If each head is a valid 95% predictor, what happens to coverage as more heads must agree?
+
 <p align="center"><img src="../docs/figures/uncertainty/multicp_head_sweep.png" width="85%" alt="Coverage vs number of heads"></p>
+
+*__Figure 1.__ Joint coverage vs number of heads K. The band spans the six backbone × score runs, the line
+is their mean, and the dashed curve is the independence prediction 0.95ᴷ.*
 
 | Heads (K) | 0.95ᴷ | AlexNet RAPS | AlexNet SAPS | GFNet RAPS | GFNet SAPS | ViT RAPS | ViT SAPS |
 |:-:|--:|--:|--:|--:|--:|--:|--:|
@@ -83,7 +91,19 @@ joint 7-dimensional score space to reach 95% **jointly**.
 | 6 | 0.735 | 0.739 | 0.735 | 0.718 | 0.734 | 0.737 | 0.741 |
 | 7 | 0.698 | 0.707 | 0.702 | 0.680 | 0.708 | 0.701 | 0.704 |
 
-*Source: [`results/multicp_head_sweep.csv`](results/multicp_head_sweep.csv).*
+*__Table 1.__ Source: [`results/multicp_head_sweep.csv`](results/multicp_head_sweep.csv).*
+
+**Reading Figure 1 and Table 1.**
+- At **K = 1** every run is within sampling noise of 95% (0.941–0.957): a single head is valid.
+- **Each extra head costs ≈ 4–5 points**, and the measured mean tracks 0.95ᴷ within about one point
+  at every K. The heads' mistakes therefore behave as if independent. That is
+  plausibly the intended effect of the staged dropout (diverse heads), and exactly what makes intersection
+  so costly.
+- RAPS and SAPS end up in the same place: the choice of score function does not matter when the
+  combination rule is the problem.
+
+> **Takeaway.** The collapse is arithmetic, not a model failure. With a per-head budget of
+> α/K = 0.0071, the same seven heads would guarantee ≥ 95% jointly.
 
 ### 3.2 Summary at K = 7
 
@@ -96,7 +116,7 @@ joint 7-dimensional score space to reach 95% **jointly**.
 | ViT | RAPS | 0.701 | 0.974 | 13.7% |
 | ViT | SAPS | 0.704 | 0.968 | 10.8% |
 
-*Source: [`results/multicp_summary.csv`](results/multicp_summary.csv).
+*__Table 2.__ Source: [`results/multicp_summary.csv`](results/multicp_summary.csv).
 \* This "set size" is averaged over the **individual heads' sets**, not the intersected set the user
 receives (the [SCMCP notebook](../multicp_sacp/README.md) fixes this and reports ≈ 0.70).*
 
@@ -110,11 +130,21 @@ is systematic, not tied to particular classes.
 |:-:|:-:|
 | <img src="results/maps/GFNet_MultiHead_SAPS_binary_uncertainty.png" alt="binary uncertainty"> | <img src="results/maps/GFNet_MultiHead_SAPS_prediction_map.png" alt="prediction map"> |
 
+*__Figure 2.__ GFNet with the SAPS score at K = 7.*
+
 **How the map is made:** the **top 10%** of pixels by average set size are marked uncertain (a fixed
 fraction, not a calibrated level). Thin flagged lines trace parcel boundaries. **The solid dark blocks on
 the left are a bug:** the code also marks every pixel whose *reference label is 7* as uncertain
 (`gt_uncertain = (y_flat == 7)`), a rule left over from the 6-band dataset where 7 meant "unlabelled". On
 DIAS, label 7 is a real class (1,595 pixels), and those parcels are greyed out regardless of the model.
+
+**How MultiCP compares.** Because the map flags a fixed quota, its 11–14% "uncertain" share is set by
+the rule, not measured. Figure 3 places it next to the other methods.
+
+<p align="center"><img src="../docs/figures/uncertainty/flagged_share_by_method.png" width="90%" alt="Flagged share by method"></p>
+
+*__Figure 3.__ Share of the scene flagged uncertain by each method (log scale). Read with
+[main README §8.5](../README.md#85-rq5--how-much-of-the-map-does-each-method-call-uncertain).*
 
 ---
 

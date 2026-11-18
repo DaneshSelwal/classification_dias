@@ -2,9 +2,11 @@
 
 [← back to main README](../README.md) · builds on: [multicp/](../multicp/README.md) + [sacp/](../sacp/README.md)
 
-> **In one sentence:** take the seven heads of [MultiCP](../multicp/README.md), **smooth each head's
-> probability map over a w × w neighbourhood** (then renormalise), and only then compute scores,
-> calibrate and intersect.
+| | |
+|---|---|
+| **What** | Take the seven heads of [MultiCP](../multicp/README.md), **smooth each head's probability map over a w × w neighbourhood** (then renormalise), and only then score, calibrate and intersect |
+| **Key result** | Joint coverage stays at **≈ 0.70** at every window; the share of the scene flagged grows with the window (**12–17% → 27–35%** with RAPS) |
+| **The lesson** | Smoothing changes *where* uncertainty appears, not the 0.95ᴷ arithmetic; with the quota-based map rule, ties can flag most of the scene (SAPS 3×3: ~82%) |
 
 | Notebook | What it does |
 |---|---|
@@ -43,6 +45,8 @@ per-head average reported by MultiCP.
 
 ## 3. Results
 
+### 3.1 Coverage and flagged share per window
+
 | Window | Model | Score | Joint coverage | Intersected set size | Uncertain pixels (scene) |
 |:-:|---|---|--:|--:|--:|
 | 3×3 | AlexNet | RAPS | 0.706 | 0.706 | 13.0% |
@@ -61,11 +65,11 @@ per-head average reported by MultiCP.
 | 9×9 | GFNet | RAPS | 0.702 | 0.702 | 27.3% |
 | 9×9 | ViT | RAPS | 0.703 | 0.710 | 28.9% |
 
-*Source: [`results/combined_summary_all_windows.csv`](results/combined_summary_all_windows.csv) (all 24
+*__Table 1.__ Source: [`results/combined_summary_all_windows.csv`](results/combined_summary_all_windows.csv) (all 24
 rows, including SAPS at 5/7/9, are in the CSV). Head sweeps per window:
 [`results/head_sweeps_all_windows.csv`](results/head_sweeps_all_windows.csv).*
 
-**Reading it.**
+**Reading Table 1.**
 - **Joint coverage ≈ 0.70 at every window.** Smoothing does not change the 0.95⁷ arithmetic of independent
   per-head thresholds ([multicp/ §2](../multicp/README.md#2-the-maths-step-by-step)).
 - **Intersected set size ≈ coverage ≈ 0.70**, so about 30% of intersected sets are **empty**. Every
@@ -79,13 +83,22 @@ rows, including SAPS at 5/7/9, are in the CSV). Head sweeps per window:
 
 <p align="center"><img src="../docs/figures/uncertainty/spatial_window_sweep.png" width="100%" alt="Window sweep"></p>
 
-### Maps (GFNet · RAPS)
+*__Figure 1.__ Panel (c) shows this folder: the RAPS flagged share per backbone rises steadily with the
+window. Panels (a)–(b) show [SACP](../sacp/README.md), which smooths scores instead of probabilities.*
+
+> **Takeaway.** Probability smoothing makes the uncertain region grow with the window. The window is
+> therefore a dial for how wide the "edge zone" around each parcel should be, and should be chosen from the
+> spatial resolution and the parcel sizes, not from coverage.
+
+### 3.2 Maps (GFNet · RAPS)
 
 | 3×3 binary | 9×9 binary |
 |:-:|:-:|
 | <img src="results/maps/GFNet_RAPS_ws3_binary.png" alt="ws3"> | <img src="results/maps/GFNet_RAPS_ws9_binary.png" alt="ws9"> |
 
-The uncertain region thickens along parcel boundaries as the window grows. The maps inherit MultiCP's
+*__Figure 2.__ Uncertain pixels (dark) with the smallest and the largest smoothing window.*
+
+**Reading Figure 2.** The uncertain region thickens along parcel boundaries as the window grows. The maps inherit MultiCP's
 label-7 rule, which marks real class-7 parcels as uncertain
 ([multicp/ §3.3](../multicp/README.md#33-maps)).
 

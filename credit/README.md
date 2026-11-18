@@ -2,9 +2,11 @@
 
 [← back to main README](../README.md) · teacher ensemble: [ensemble/](../ensemble/README.md)
 
-> **In one sentence:** running a 5-model ensemble on every pixel is 5× the cost, so CREDIT trains **one
-> "student" network with two heads** to imitate the ensemble's credal intervals: one head for the cautious
-> probabilities $`p^*`$, one for the disagreement $`\Delta p`$.
+| | |
+|---|---|
+| **What** | Running a 5-model ensemble on every pixel costs 5×, so CREDIT trains **one "student" network with two heads** to imitate the ensemble's credal intervals: one head for the cautious probabilities $`p^*`$, one for the disagreement $`\Delta p`$ |
+| **Key result** | The student keeps ensemble-level accuracy (99.83–99.99%) in **one forward pass**. It flags **25,499–38,001 pixels (9.7–14.5% of the scene)**, and **99.6–99.96%** of them are unlabelled |
+| **The lesson** | The distilled uncertainty points at the unlabelled land. On labelled test pixels the learned disagreement is tiny (EU ≈ 10⁻⁴) |
 
 | Notebook | What it does |
 |---|---|
@@ -62,36 +64,64 @@ if its upper bound reaches the best lower bound (*interval dominance*, as in Cre
 
 ## 3. Results
 
+### 3.1 Accuracy and credal metrics on labelled test pixels
+
 | Student | Accuracy | Macro-F1 | NLL | ECE | Mean AU | Mean EU | Credal coverage | Avg. set size |
 |---|--:|--:|--:|--:|--:|--:|--:|--:|
 | AlexNet-CNN | 99.90% | 0.9977 | 0.0033 | 0.0005 | 0.0037 | 0.00030 | 0.9990 | 1.0000 |
 | GFNet | **99.99%** | 0.9999 | 0.0009 | 0.0008 | 0.0060 | 0.000002 | 0.9999 | 1.0000 |
 | ViT-UNet | 99.83% | 0.9962 | 0.0387 | 0.0323 | 0.2095 | 0.00021 | 0.9983 | 1.0001 |
 
-*Sources: [`results/credit_evaluation_summary.csv`](results/credit_evaluation_summary.csv),
+*__Table 1.__ Sources: [`results/credit_evaluation_summary.csv`](results/credit_evaluation_summary.csv),
 [`results/credit_credal_coverage_overall.csv`](results/credit_credal_coverage_overall.csv). Metrics on 13,474
 labelled test pixels.*
 
 **Per-class credal coverage** ([`results/credit_credal_coverage_classwise.csv`](results/credit_credal_coverage_classwise.csv)):
 every class is ≥ 98.2% for AlexNet (lowest: label 7), ≥ 99.96% for GFNet, and ≥ 98.6% for ViT (lowest: label 8).
 
-**Reading it.**
+**Reading Table 1.**
 - The student keeps the ensemble's accuracy in **one forward pass**.
 - On labelled test pixels the learned disagreement is tiny (EU ≈ 10⁻⁴). The teachers agreed on those pixels,
   so there was little disagreement to learn. Compare CreDE's scene-wide EU of 0.05–0.10 in the
   [figure](../docs/figures/uncertainty/credal_au_eu.png): most disagreement lives on unlabelled land.
 - Credal sets are effectively single classes (size 1.0000–1.0001), so coverage equals accuracy.
 
-### Maps
+### 3.2 Which pixels does CREDIT flag?
+
+| Student | Flagged pixels (AU > 0.5, EU > 0.2 or TU > 0.7) | % of scene | of which **unlabelled** |
+|---|--:|--:|--:|
+| AlexNet-CNN | 25,499 | 9.7% | 99.86% |
+| GFNet | 38,001 | 14.5% | 99.96% |
+| ViT-UNet | 32,744 | 12.5% | 99.61% |
+
+*__Table 2.__ Computed from `results/*_uncertain_pixels.csv` (reference label 0 = unlabelled). The scene is
+79.4% unlabelled, so a random flag would hit an unlabelled pixel 79.4% of the time.*
+
+**Reading Table 2.** Nearly every flagged pixel is one that was never labelled. That rate is far above the
+79.4% expected by chance. The student has learned to report disagreement exactly where its teachers would
+have no training signal to agree on.
+
+<p align="center"><img src="../docs/figures/uncertainty/flagged_share_by_method.png" width="90%" alt="Flagged share by method"></p>
+
+*__Figure 1.__ CREDIT's 10–14% in context: share of the scene flagged by each method (log scale).*
+
+> **Takeaway.** CREDIT delivers the ensemble's main insight ("these surfaces are unfamiliar") at 1/5 of
+> the inference cost. Its flagged pixels are a ready-made list of where to collect labels next.
+
+### 3.3 Maps
 
 | AlexNet-CNN | GFNet | ViT-UNet |
 |:-:|:-:|:-:|
 | <img src="results/AlexNet_CNN_CREDIT_spatial_maps.png" alt="AlexNet CREDIT"> | <img src="results/GFNet_CREDIT_spatial_maps.png" alt="GFNet CREDIT"> | <img src="results/ViT_UNet_CREDIT_spatial_maps.png" alt="ViT CREDIT"> |
 
+*__Figure 2.__ CREDIT AU/EU/TU maps per backbone.*
+
 The `*_uncertain_pixels.csv` files list every pixel flagged under AU > 0.5, EU > 0.2 or TU > 0.7 with its
 row, column, predicted and reference class.
 
 <p align="center"><img src="results/credit_confusion_matrices.png" width="90%" alt="CREDIT confusion matrices"></p>
+
+*__Figure 3.__ Student confusion matrices on the labelled test pixels.*
 
 ---
 

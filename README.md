@@ -591,7 +591,7 @@ confines uncertainty to thin outlines along parcel boundaries.*
 
 > **Takeaway RQ6.** Intersecting independently calibrated heads breaks the guarantee in a predictable way
 > (0.95ᴷ). Spatial smoothing produces more coherent maps, at the cost of bending the exchangeability
-> assumption behind the guarantee ([sacp/](sacp/README.md#5-caveats)).
+> assumption behind the guarantee ([sacp/](sacp/README.md#4-caveats)).
 
 ### 8.7 RQ7 · What do ensembles say about the two kinds of uncertainty?
 
@@ -667,7 +667,7 @@ splits and spatially aware calibration.
 | 7 | MultiCP / SCMCP maps treat label 7 as "unlabelled" (left over from the 6-band dataset) | Real class-7 parcels are greyed out in those maps | [multicp/](multicp/README.md#33-maps) |
 | 8 | CREDIT selects its best checkpoint on the test set | Small optimistic bias in CREDIT's test metrics | [credit/](credit/README.md) |
 | 9 | DOFA assumes 65 evenly spaced wavelengths, 0.40–2.50 µm | DOFA's wavelength conditioning is approximate | [dofa/](dofa/README.md) |
-| 10 | SACP / SCMCP smooth across calibration and test pixels | Exchangeability is bent, so the formal guarantee does not strictly apply | [sacp/](sacp/README.md#5-caveats) |
+| 10 | SACP / SCMCP smooth across calibration and test pixels | Exchangeability is bent, so the formal guarantee does not strictly apply | [sacp/](sacp/README.md#4-caveats) |
 | 11 | One scene, one sensor, one random split, no repeated seeds | No confidence intervals across runs; results may not transfer to other scenes | — |
 | 12 | Class names and acquisition details unknown | Class interpretations in §3.2 are inferred | [§3.1](#31-what-the-files-contain) |
 

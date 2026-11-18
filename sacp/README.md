@@ -2,15 +2,18 @@
 
 [← back to main README](../README.md) · multi-head version: [multicp_sacp/](../multicp_sacp/README.md)
 
-> **In one sentence:** neighbouring pixels usually belong to the same field, so before calibrating, SACP
-> **averages each pixel's conformal score with its neighbours' scores** over a 3×3, 5×5, 7×7 or 9×9 window.
-> The result is spatially coherent uncertainty instead of salt-and-pepper noise.
+| | |
+|---|---|
+| **What** | Before calibrating, average each pixel's conformal score with its labelled neighbours' scores over a 3×3, 5×5, 7×7 or 9×9 window |
+| **Key result** | Coverage rises to **≈ 100%** and set size to **≈ 1.00** at every window: the ~5% empty sets of Split CP become correct singletons |
+| **What it adds** | **Coherent maps.** Unlabelled land gets stable classes, and uncertainty shrinks to thin outlines along parcel boundaries |
+| **Price** | Smoothing mixes calibration and test scores, so the formal 95% guarantee no longer strictly applies |
 
 | Notebook | What it does |
 |---|---|
 | [`Model_sacp_comparison.ipynb`](Model_sacp_comparison.ipynb) | Loads the three baseline backbones, computes APS scores, smooths them on the image grid, calibrates, and sweeps window sizes 3/5/7/9 |
 
-Calibration/evaluation split as in [baseline/](../baseline/README.md#2-the-data-the-methods-see) (6,737 / 6,737).
+Calibration/evaluation split as in [baseline/](../baseline/README.md#2-data-seen-by-the-methods) (6,737 / 6,737).
 
 ---
 
@@ -63,6 +66,8 @@ on the evaluation pixels.
 
 ## 3. Results
 
+### 3.1 Coverage, set size and threshold per window
+
 | Window | Model | Coverage | Avg. set size | $`\hat q`$ |
 |:-:|---|--:|--:|--:|
 | 3×3 | AlexNet | 1.0000 | 1.0000 | 0.819 |
@@ -78,12 +83,16 @@ on the evaluation pixels.
 | 9×9 | GFNet | 1.0000 | 1.0001 | 0.724 |
 | 9×9 | ViT | 0.9997 | 1.0004 | 0.702 |
 
-*Source: [`results/combined_summary_all_windows.csv`](results/combined_summary_all_windows.csv); per-window
+*__Table 1.__ Source: [`results/combined_summary_all_windows.csv`](results/combined_summary_all_windows.csv); per-window
 workbooks and CSVs in `results/window_{3,5,7,9}/`.*
 
 <p align="center"><img src="../docs/figures/uncertainty/spatial_window_sweep.png" width="100%" alt="SACP and SCMCP vs window size"></p>
 
-**Reading it.**
+*__Figure 1.__ (a) SACP coverage per window, with unsmoothed Split CP as the reference point; (b) the
+calibrated threshold $`\hat q`$; (c) for comparison, the share of the scene that
+[SCMCP](../multicp_sacp/README.md) flags.*
+
+**Reading Table 1 and Figure 1.**
 - **Coverage ≈ 100% and set size ≈ 1 at every window.** With a 99.9%-accurate model, the top class's APS
   score is $`u \cdot \hat p_{\max} \approx u`$ (uniform on 0–1), while every other class scores ≈ 1. The 95th
   percentile therefore lands below 1, which keeps the top class and drops the rest. Because empty sets are
@@ -91,21 +100,36 @@ workbooks and CSVs in `results/window_{3,5,7,9}/`.*
   match accuracy.
 - **$`\hat q`$ falls as the window grows** (0.82 → 0.73 for AlexNet). Averaging more neighbours' random $`u`$
   values pulls the smoothed scores towards 0.5, so the 95th percentile moves down.
+- **Window size changes the threshold but not the outcome.** Coverage and set size are flat from 3×3 to
+  9×9. On near-perfect models, the window is a choice about *how the map looks*, not about accuracy.
 
-### Maps (GFNet)
+> **Takeaway (numbers).** On this data SACP turns Split CP's abstentions into confident, correct
+> singletons. The coverage number is therefore uninformative (it equals accuracy), and the value of SACP
+> has to be judged from the maps.
+
+### 3.2 What the maps look like (GFNet)
 
 | Split CP (no smoothing) | SACP 3×3 |
 |:-:|:-:|
 | <img src="../docs/figures/maps/baseline_GFNet_splitcp_class_mask.png" alt="Split CP"> | <img src="../docs/figures/maps/sacp_ws3_GFNet_class_mask.png" alt="SACP 3x3"> |
 
+*__Figure 2.__ The same model, without and with 3×3 score smoothing.*
+
 | SACP 3×3: certain vs uncertain | SACP 9×9: certain vs uncertain |
 |:-:|:-:|
 | <img src="../docs/figures/maps/sacp_ws3_GFNet_certain_uncertain.png" alt="SACP ws3"> | <img src="../docs/figures/maps/sacp_ws9_GFNet_certain_uncertain.png" alt="SACP ws9"> |
 
-This is SACP's real contribution here. Split CP greys out large unlabelled areas; SACP gives them
+*__Figure 3.__ Certain (white) vs uncertain (dark) pixels with the smallest and largest window.*
+
+**Reading Figures 2–3.** This is SACP's real contribution here. Split CP greys out large unlabelled areas; SACP gives them
 **coherent classes and confines uncertainty to thin outlines along parcel boundaries**, where a 9×9 patch
 really does straddle two surfaces. *Maps extracted from `results/window_*/conformal_reports_SACP_ws*_all_models.xlsx`;
-notebook class numbering 0–7 = label 1–8.*
+notebook class numbering 0–7 = label 1–8.* Going from 3×3 to 9×9 does
+not widen the outlines much: by then each pixel's score is already dominated by its parcel's average.
+
+> **Takeaway (maps).** Spatial smoothing is the only method here that produces maps a field analyst would
+> recognise: whole parcels with uncertain edges. That is worth the cost in formal rigour, as long as the
+> caveats below are stated.
 
 ---
 
@@ -120,7 +144,7 @@ notebook class numbering 0–7 = label 1–8.*
 - The forced non-empty rule makes coverage ≥ accuracy by construction on near-perfect models.
 - Note the code's update is $`\lambda\cdot\text{own} + \lambda\cdot\text{neighbours}`$. This equals a
   proper weighted average only for λ = 0.5, the value used.
-- AlexNet inherits the seed-10/seed-42 overlap ([main README §8](../README.md#8-limitations-read-this-before-citing-a-number)).
+- AlexNet inherits the seed-10/seed-42 overlap ([main README §8](../README.md#10-limitations-and-threats-to-validity)).
 
 ## References
 
