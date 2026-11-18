@@ -664,7 +664,7 @@ splits and spatially aware calibration.
 | 4 | Near-perfect models + α = 0.05 | Sets are singletons or empty and do not single out errors | [§8.2](#82-rq2--what-do-the-prediction-sets-look-like) |
 | 5 | RAPS implemented without randomisation, and without the true class's own probability | Threshold collapses to 0 → always top-1 → coverage = accuracy | [baseline/](baseline/README.md#raps) |
 | 6 | MultiCP intersects independently calibrated heads | Joint coverage ≈ 0.95⁷ ≈ 70% | [multicp/](multicp/README.md) |
-| 7 | MultiCP / SCMCP maps treat label 7 as "unlabelled" (left over from the 6-band dataset) | Real class-7 parcels are greyed out in those maps | [multicp/](multicp/README.md#33-maps) |
+| 7 | MultiCP / SCMCP maps treat label 7 as "unlabelled" (a hard-coded `y == 7` rule; the notebook's docstring calls label 7 "unlabelled") | Real class-7 parcels are greyed out in those maps | [multicp/](multicp/README.md#33-maps) |
 | 8 | CREDIT selects its best checkpoint on the test set | Small optimistic bias in CREDIT's test metrics | [credit/](credit/README.md) |
 | 9 | DOFA assumes 65 evenly spaced wavelengths, 0.40–2.50 µm | DOFA's wavelength conditioning is approximate | [dofa/](dofa/README.md) |
 | 10 | SACP / SCMCP smooth across calibration and test pixels | Exchangeability is bent, so the formal guarantee does not strictly apply | [sacp/](sacp/README.md#4-caveats) |

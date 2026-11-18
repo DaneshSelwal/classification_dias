@@ -135,7 +135,7 @@ is systematic, not tied to particular classes.
 **How the map is made:** the **top 10%** of pixels by average set size are marked uncertain (a fixed
 fraction, not a calibrated level). Thin flagged lines trace parcel boundaries. **The solid dark blocks on
 the left are a bug:** the code also marks every pixel whose *reference label is 7* as uncertain
-(`gt_uncertain = (y_flat == 7)`), a rule left over from the 6-band dataset where 7 meant "unlabelled". On
+(`gt_uncertain = (y_flat == 7)`), a hard-coded rule whose docstring calls label 7 "unlabelled". On
 DIAS, label 7 is a real class (1,595 pixels), and those parcels are greyed out regardless of the model.
 
 **How MultiCP compares.** Because the map flags a fixed quota, its 11–14% "uncertain" share is set by
