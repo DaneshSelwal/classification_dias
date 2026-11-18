@@ -13,12 +13,14 @@
 
 ## 1. The model in plain words
 
-A state-space model reads tokens one at a time and keeps a running **memory** $h_t$:
+A state-space model reads tokens one at a time and keeps a running **memory** $`h_t`$:
 
-$$h_t = \bar A_t\, h_{t-1} + \bar B_t\, x_t, \qquad y_t = C_t\, h_t$$
+```math
+h_t = \bar A_t\, h_{t-1} + \bar B_t\, x_t, \qquad y_t = C_t\, h_t
+```
 
 *In words: "new memory = some of the old memory + some of the new input; the output reads from memory".*
-**Selective** (Mamba) means $\bar A_t, \bar B_t, C_t$ depend on the current token, so the model can decide
+**Selective** (Mamba) means $`\bar A_t, \bar B_t, C_t`$ depend on the current token, so the model can decide
 what to remember and what to forget. It runs in linear time, where attention is quadratic. This notebook
 implements the scan with `tf.scan`, which approximates Mamba's fused CUDA kernel.
 

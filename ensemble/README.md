@@ -22,36 +22,44 @@ itself is ambiguous. That is **aleatoric uncertainty**, and more training would 
 
 ## 2. The maths, step by step
 
-Let $p^{(m)}_k(x)$ be member $m$'s probability for class $k$ ($m = 1..5$).
+Let $`p^{(m)}_k(x)`$ be member $`m`$'s probability for class $`k`$ ($`m = 1..5`$).
 
 **Step 1. Credal interval per class.** Keep the lowest and highest opinion:
 
-$$\underline{p}_k(x) = \min_m p^{(m)}_k(x), \qquad \overline{p}_k(x) = \max_m p^{(m)}_k(x), \qquad \Delta p_k(x) = \overline{p}_k - \underline{p}_k$$
+```math
+\underline{p}_k(x) = \min_m p^{(m)}_k(x), \qquad \overline{p}_k(x) = \max_m p^{(m)}_k(x), \qquad \Delta p_k(x) = \overline{p}_k - \underline{p}_k
+```
 
 *In words: the band of probabilities the five members span for each class. A "credal set" is the set of
 all distributions inside these bands.*
 
 **Step 2. A cautious single distribution.** Renormalise the lower bounds:
 
-$$p^{*}_k(x) = \frac{\underline{p}_k(x)}{\sum_j \underline{p}_j(x)}$$
+```math
+p^{*}_k(x) = \frac{\underline{p}_k(x)}{\sum_j \underline{p}_j(x)}
+```
 
 **Step 3. Split uncertainty into two parts.**
 
-$$\text{AU}(x) = -\sum_k p^{*}_k \ln p^{*}_k \quad(\text{entropy}), \qquad \text{EU}(x) = \frac{1}{C}\sum_k \Delta p_k(x), \qquad \text{TU} = \text{AU} + \text{EU}$$
+```math
+\text{AU}(x) = -\sum_k p^{*}_k \ln p^{*}_k \quad(\text{entropy}), \qquad \text{EU}(x) = \frac{1}{C}\sum_k \Delta p_k(x), \qquad \text{TU} = \text{AU} + \text{EU}
+```
 
 *AU is large when the cautious distribution is spread out (max ln 8 ≈ 2.08 for 8 classes). EU is large
 when the members disagree (max 1).*
 
-**Step 4. A prediction set by interval dominance.** Keep class $k$ unless another class is *certainly*
-better, meaning its worst case beats $k$'s best case:
+**Step 4. A prediction set by interval dominance.** Keep class $`k`$ unless another class is *certainly*
+better, meaning its worst case beats $`k`$'s best case:
 
-$$k \in C(x) \iff \overline{p}_k(x) \ge \max_j \underline{p}_j(x)$$
+```math
+k \in C(x) \iff \overline{p}_k(x) \ge \max_j \underline{p}_j(x)
+```
 
 > **Worked example (3 classes).** Five members give Crop A ∈ [0.55, 0.80], Crop B ∈ [0.15, 0.40],
 > Water ∈ [0.01, 0.05]. The best lower bound is 0.55 (Crop A). Crop B's upper bound 0.40 < 0.55, so it is
 > **excluded**; Water too. Set = {Crop A}. If instead Crop B ∈ [0.15, 0.60], then 0.60 ≥ 0.55, so the set
 > is {Crop A, Crop B}.
-> $\Delta p$ = (0.25, 0.25, 0.04) → EU = 0.18.
+> $`\Delta p`$ = (0.25, 0.25, 0.04) → EU = 0.18.
 
 *Code:* `evaluate_homogeneous_ensemble` (Section 5.2), `credal_set_metrics` (Section 7.0a). Pixel masks use
 fixed thresholds AU > 0.5, EU > 0.2, TU > 0.7.

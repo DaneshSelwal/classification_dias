@@ -17,10 +17,12 @@ CLIP-style models learn a shared space where an image and a sentence describing 
 Each class gets a prompt (here "land cover class one", "… two", …). The class probability is a softmax
 over **cosine similarities**:
 
-$$\hat p_k(x) = \frac{\exp\big(\cos(f(x), g(t_k))/\tau\big)}{\sum_j \exp\big(\cos(f(x), g(t_j))/\tau\big)}$$
+```math
+\hat p_k(x) = \frac{\exp\big(\cos(f(x), g(t_k))/\tau\big)}{\sum_j \exp\big(\cos(f(x), g(t_j))/\tau\big)}
+```
 
-*In words: "which class description does this patch look most like?" $f$ is the image tower, $g$ the
-text tower, $t_k$ the prompt for class $k$, and $\tau$ a temperature.*
+*In words: "which class description does this patch look most like?" $`f`$ is the image tower, $`g`$ the
+text tower, $`t_k`$ the prompt for class $`k`$, and $`\tau`$ a temperature.*
 
 **What this is and isn't.** The text tower is trained **from scratch**, and the prompts carry no meaning
 ("class one"), so this is not the pretrained GeoRSCLIP. It behaves like a normal classifier with a

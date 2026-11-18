@@ -4,7 +4,7 @@
 
 > **In one sentence:** running a 5-model ensemble on every pixel is 5× the cost, so CREDIT trains **one
 > "student" network with two heads** to imitate the ensemble's credal intervals: one head for the cautious
-> probabilities $p^*$, one for the disagreement $\Delta p$.
+> probabilities $`p^*`$, one for the disagreement $`\Delta p`$.
 
 | Notebook | What it does |
 |---|---|
@@ -24,27 +24,33 @@ That is **knowledge distillation of uncertainty**.
 **Step 1. Targets from the teachers** (same formulas as [CreDE](../ensemble/README.md#2-the-maths-step-by-step)),
 computed on every training pixel:
 
-$$p^{*}_k = \frac{\min_m p^{(m)}_k}{\sum_j \min_m p^{(m)}_j}, \qquad \Delta p_k = \max_m p^{(m)}_k - \min_m p^{(m)}_k$$
+```math
+p^{*}_k = \frac{\min_m p^{(m)}_k}{\sum_j \min_m p^{(m)}_j}, \qquad \Delta p_k = \max_m p^{(m)}_k - \min_m p^{(m)}_k
+```
 
 **Step 2. Student with two heads.** The backbone's penultimate features feed:
-- a **softmax** head → $\hat p^{*}(x)$ (sums to 1), and
-- a **sigmoid** head → $\widehat{\Delta p}(x)$ (each value in 0–1).
+- a **softmax** head → $`\hat p^{*}(x)`$ (sums to 1), and
+- a **sigmoid** head → $`\widehat{\Delta p}(x)`$ (each value in 0–1).
 
 **Step 3. Loss.**
 
-$$\mathcal{L} = \underbrace{\mathrm{KL}\big(p^{*} \,\|\, \hat p^{*}\big)}_{\text{match the cautious distribution}} \;+\; \lambda\,\underbrace{\frac{1}{C}\sum_k \big(\Delta p_k - \widehat{\Delta p}_k\big)^2}_{\text{match the disagreement}}, \qquad \lambda = 0.5$$
+```math
+\mathcal{L} = \underbrace{\mathrm{KL}\big(p^{*} \,\|\, \hat p^{*}\big)}_{\text{match the cautious distribution}} \;+\; \lambda\,\underbrace{\frac{1}{C}\sum_k \big(\Delta p_k - \widehat{\Delta p}_k\big)^2}_{\text{match the disagreement}}, \qquad \lambda = 0.5
+```
 
 *In words: copy the shape of the teachers' cautious answer (KL divergence), and copy how wide their
 disagreement was (squared error).*
 
 **Step 4. Uncertainty and sets at test time.**
 
-$$\text{AU} = -\sum_k \hat p^{*}_k \ln \hat p^{*}_k, \qquad \text{EU} = \frac{1}{C}\sum_k \widehat{\Delta p}_k, \qquad \text{TU} = \text{AU} + \text{EU}$$
+```math
+\text{AU} = -\sum_k \hat p^{*}_k \ln \hat p^{*}_k, \qquad \text{EU} = \frac{1}{C}\sum_k \widehat{\Delta p}_k, \qquad \text{TU} = \text{AU} + \text{EU}
+```
 
-Bounds: lower $= \hat p^{*}$, upper $= \min(1, \hat p^{*} + \widehat{\Delta p})$. A class enters the set
+Bounds: lower $`= \hat p^{*}`$, upper $`= \min(1, \hat p^{*} + \widehat{\Delta p})`$. A class enters the set
 if its upper bound reaches the best lower bound (*interval dominance*, as in CreDE).
 
-> **Worked example.** The student outputs $\hat p^{*}$ = (0.85, 0.12, 0.03) and $\widehat{\Delta p}$ =
+> **Worked example.** The student outputs $`\hat p^{*}`$ = (0.85, 0.12, 0.03) and $`\widehat{\Delta p}`$ =
 > (0.05, 0.10, 0.01). Upper bounds = (0.90, 0.22, 0.04). Best lower bound = 0.85. Only Crop A reaches it →
 > set {Crop A}. AU = −(0.85 ln 0.85 + 0.12 ln 0.12 + 0.03 ln 0.03) ≈ 0.50; EU ≈ 0.053; TU ≈ 0.55.
 

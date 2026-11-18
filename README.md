@@ -260,18 +260,20 @@ A classifier always answers, even when it is guessing. Uncertainty quantificatio
 
 ### 6.1 The one formula behind conformal prediction
 
-1. Score how "strange" the true answer looks for each calibration pixel: $s_i = 1 - \hat p_{y_i}(x_i)$.
+1. Score how "strange" the true answer looks for each calibration pixel: $`s_i = 1 - \hat p_{y_i}(x_i)`$.
    If the model gave the true class 0.98, the score is 0.02 (not strange).
 2. Find the cut-off that 95% of calibration scores stay under (with a small finite-sample correction):
 
-$$\hat q = \text{Quantile}\left(s_1,\dots,s_n;\ \frac{\lceil (n+1)(1-\alpha)\rceil}{n}\right),\qquad \alpha = 0.05$$
+```math
+\hat q = \text{Quantile}\left(s_1,\dots,s_n;\ \frac{\lceil (n+1)(1-\alpha)\rceil}{n}\right),\qquad \alpha = 0.05
+```
 
 3. For a new pixel, keep every class whose score is under the cut-off:
-   $C(x) = \{\,k : 1 - \hat p_k(x) \le \hat q\,\}$.
+   $`C(x) = \{\,k : 1 - \hat p_k(x) \le \hat q\,\}`$.
 
 Because new pixels are scored exactly like calibration pixels, the true class lands under the cut-off
 **95% of the time on average**. Every conformal folder in this repo changes one of these three steps: the score,
-the grouping used to compute $\hat q$, or the neighbourhood the score is computed over.
+the grouping used to compute $`\hat q`$, or the neighbourhood the score is computed over.
 
 ### 6.2 Method map
 
@@ -298,11 +300,13 @@ the grouping used to compute $\hat q$, or the neighbourhood the score is compute
 
 At α = 0.05, conformal prediction promises *at least 95%* coverage and uses up the remaining 5% to make
 sets as small as possible. A 99.9%-accurate model is wrong on only ~0.1% of pixels, so the cut-off
-$\hat q$ has to fall **among correct predictions**. The 5% of pixels with the least confident correct
+$`\hat q`$ has to fall **among correct predictions**. The 5% of pixels with the least confident correct
 prediction get an **empty set**: the method says "I won't commit". That is why, for every near-perfect
 backbone:
 
-$$\text{coverage} \approx \text{singleton rate} \approx 0.95, \qquad \text{empty-set rate} \approx 0.05, \qquad \text{average set size} \approx 0.95 < 1.$$
+```math
+\text{coverage} \approx \text{singleton rate} \approx 0.95, \qquad \text{empty-set rate} \approx 0.05, \qquad \text{average set size} \approx 0.95 < 1.
+```
 
 <p align="center"><img src="docs/figures/uncertainty/why_empty_sets.png" width="85%" alt="Illustration of why empty sets appear"></p>
 

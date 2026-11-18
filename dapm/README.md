@@ -43,29 +43,33 @@ flowchart LR
 
 **Stage 1: VAE + domain alignment** (20 epochs, lr 10⁻³, backbone frozen):
 
-$$\mathcal{L}_1 = \underbrace{\lambda_{rec}\,(\mathcal{L}^{src}_{rec} + \mathcal{L}^{tgt}_{rec})}_{\text{rebuild the features}} + \underbrace{\lambda_{KL}\,\mathrm{KL}\big(q(z|x)\,\|\,\mathcal{N}(0,I)\big)}_{\text{keep codes tidy}} + \underbrace{\lambda_{CE}\,\mathrm{CE}(y, \hat p(z))}_{\text{classify source}} + \underbrace{\lambda_{dom}\,\mathcal{L}_{domain}}_{\text{fool the discriminator}}$$
+```math
+\mathcal{L}_1 = \underbrace{\lambda_{rec}\,(\mathcal{L}^{src}_{rec} + \mathcal{L}^{tgt}_{rec})}_{\text{rebuild the features}} + \underbrace{\lambda_{KL}\,\mathrm{KL}\big(q(z|x)\,\|\,\mathcal{N}(0,I)\big)}_{\text{keep codes tidy}} + \underbrace{\lambda_{CE}\,\mathrm{CE}(y, \hat p(z))}_{\text{classify source}} + \underbrace{\lambda_{dom}\,\mathcal{L}_{domain}}_{\text{fool the discriminator}}
+```
 
-with $\lambda_{rec}=1,\ \lambda_{KL}=0.01,\ \lambda_{CE}=1,\ \lambda_{dom}=0.2$.
+with $`\lambda_{rec}=1,\ \lambda_{KL}=0.01,\ \lambda_{CE}=1,\ \lambda_{dom}=0.2`$.
 
 *The gradient-reversal layer flips the sign of the discriminator's gradient on its way into the encoder,
 so one optimiser step makes the discriminator better and the encoder harder to discriminate.*
 
-**Stage 2: label diffusion** (20 epochs, T = 100 steps, linear $\beta_t$ from 10⁻⁴ to 0.02).
-Take the one-hot label $y_0$ and add noise, $y_t = \sqrt{\bar\alpha_t}\,y_0 + \sqrt{1-\bar\alpha_t}\,\varepsilon$.
+**Stage 2: label diffusion** (20 epochs, T = 100 steps, linear $`\beta_t`$ from 10⁻⁴ to 0.02).
+Take the one-hot label $`y_0`$ and add noise, $`y_t = \sqrt{\bar\alpha_t}\,y_0 + \sqrt{1-\bar\alpha_t}\,\varepsilon`$.
 The denoiser learns to recover the noise:
 
-$$\mathcal{L}_2 = \big\|\varepsilon - \hat\varepsilon(z, y_t, \hat p, t)\big\|^2_{\text{source}} \;+\; 0.5\,\big\|\varepsilon - \hat\varepsilon\big\|^2_{\text{target, pseudo-label } y_0=\hat p}$$
+```math
+\mathcal{L}_2 = \big\|\varepsilon - \hat\varepsilon(z, y_t, \hat p, t)\big\|^2_{\text{source}} \;+\; 0.5\,\big\|\varepsilon - \hat\varepsilon\big\|^2_{\text{target, pseudo-label } y_0=\hat p}
+```
 
 *In words: "given this pixel's code and the classifier's hint, and a noisy label, guess the noise". On
 target pixels the classifier's own soft prediction stands in for the missing label.*
 
 **Inference: 30 samples, one test.** For each pixel:
-1. Draw 30 codes $z^{(s)} = \mu + \sigma\,\varepsilon^{(s)}$.
-2. Start each from pure noise $y_T$ and run the reverse diffusion for 100 steps → softmax →
-   $p^{(s)}$, $s = 1..30$.
-3. Let $c_1, c_2$ be the two classes with the highest *mean* probability. Run **Welch's t-test** on the 30
-   values of $p^{(s)}_{c_1}$ against the 30 values of $p^{(s)}_{c_2}$.
-4. **Uncertain** if $p\text{-value} > 0.05$, i.e. we cannot be 95% sure the top class really beats the
+1. Draw 30 codes $`z^{(s)} = \mu + \sigma\,\varepsilon^{(s)}`$.
+2. Start each from pure noise $`y_T`$ and run the reverse diffusion for 100 steps → softmax →
+   $`p^{(s)}`$, $`s = 1..30`$.
+3. Let $`c_1, c_2`$ be the two classes with the highest *mean* probability. Run **Welch's t-test** on the 30
+   values of $`p^{(s)}_{c_1}`$ against the 30 values of $`p^{(s)}_{c_2}`$.
+4. **Uncertain** if $`p\text{-value} > 0.05`$, i.e. we cannot be 95% sure the top class really beats the
    runner-up.
 
 > **Worked example.** Over 30 draws, crop A averages 0.48 (sd 0.15) and crop B 0.42 (sd 0.15). Welch's
@@ -118,7 +122,7 @@ flags should not be read as meaningful doubt. Compare the conformal maps in
 
 *Empirical coverage at a 95% target. Source:
 [`results/conformal_uncertainty_results/dapm_conformal_summary_metrics.csv`](results/conformal_uncertainty_results/dapm_conformal_summary_metrics.csv).
-Clustered CP uses DAPM's latent mean $\mu$ as the embedding.*
+Clustered CP uses DAPM's latent mean $`\mu`$ as the embedding.*
 
 The pattern matches the [baseline](../baseline/README.md#41-coverage-and-set-size): all methods except RAPS
 sit near 95%, with ~4–5% empty sets and no multi-class sets. Split CP's mean per-class coverage drops to

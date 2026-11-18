@@ -26,32 +26,36 @@ smaller and makes errors more likely.** The [Multi-CP method](https://github.com
 
 ## 2. The maths, step by step
 
-**Step 1. A score per head.** For head $h$ with probabilities $\hat p^{(h)}(x)$, two scores come from the
+**Step 1. A score per head.** For head $`h`$ with probabilities $`\hat p^{(h)}(x)`$, two scores come from the
 Multi-CP library:
 
-- **RAPS** (randomised, $k_{reg} = 5$, $\lambda = 0.05$): probability mass of all classes ranked above
-  $y$, plus a random fraction $u \sim U(0,1)$ of $y$'s own mass, plus a penalty $\lambda$ for each rank
+- **RAPS** (randomised, $`k_{reg} = 5`$, $`\lambda = 0.05`$): probability mass of all classes ranked above
+  $`y`$, plus a random fraction $`u \sim U(0,1)`$ of $`y`$'s own mass, plus a penalty $`\lambda`$ for each rank
   beyond 5:
-  $s^{(h)}(x,y) = \sum_{j:\,r_j<r_y}\hat p_j + u\,\hat p_y + \lambda\max(r_y - 5, 0)$
-- **SAPS** ($\gamma = 0.3$): only the **top** probability is used, and every lower rank adds a fixed step.
-  With ranks counted from 0 (top class $r_y = 0$): $s(x, y) = u\,\hat p_{\max}$ if $r_y = 0$, else
-  $\hat p_{\max} + \gamma\,(r_y - 1 + u)$.
+  $`s^{(h)}(x,y) = \sum_{j:\,r_j<r_y}\hat p_j + u\,\hat p_y + \lambda\max(r_y - 5, 0)`$
+- **SAPS** ($`\gamma = 0.3`$): only the **top** probability is used, and every lower rank adds a fixed step.
+  With ranks counted from 0 (top class $`r_y = 0`$): $`s(x, y) = u\,\hat p_{\max}`$ if $`r_y = 0`$, else
+  $`\hat p_{\max} + \gamma\,(r_y - 1 + u)`$.
   *SAPS ignores how the remaining probability is spread, which makes it robust to over-confident tails.*
 
-**Step 2. One threshold per head.** $\hat q^{(h)}$ = the 95th percentile of the true-class scores of head
-$h$ on calibration pixels.
+**Step 2. One threshold per head.** $`\hat q^{(h)}`$ = the 95th percentile of the true-class scores of head
+$`h`$ on calibration pixels.
 
 **Step 3. Intersect.**
 
-$$C(x) = \bigcap_{h=1}^{7} \big\{\,k : s^{(h)}(x, k) \le \hat q^{(h)}\,\big\}$$
+```math
+C(x) = \bigcap_{h=1}^{7} \big\{\,k : s^{(h)}(x, k) \le \hat q^{(h)}\,\big\}
+```
 
 **Why coverage collapses.** Each head's set misses the true class with probability ≈ 5%. The true class
 survives the intersection only if **no** head misses it. If the misses were independent:
 
-$$\Pr(y \in C) \approx (1 - \alpha)^K = 0.95^{7} = 0.698$$
+```math
+\Pr(y \in C) \approx (1 - \alpha)^K = 0.95^{7} = 0.698
+```
 
 The head sweep below matches this almost exactly, so the misses of the seven heads are close to
-independent. The fix is to give each head a stricter budget, for example $\alpha/K$ (Bonferroni: each head at $1 - 0.05/7 \approx 99.29\%$, which guarantees ≥ 95% jointly), or to use the reference Multi-CP algorithm, which selects "cells" in the
+independent. The fix is to give each head a stricter budget, for example $`\alpha/K`$ (Bonferroni: each head at $`1 - 0.05/7 \approx 99.29\%`$, which guarantees ≥ 95% jointly), or to use the reference Multi-CP algorithm, which selects "cells" in the
 joint 7-dimensional score space to reach 95% **jointly**.
 
 > **Worked example.** Three heads, each keeping its true class with probability 0.95: joint
@@ -118,7 +122,7 @@ DIAS, label 7 is a real class (1,595 pixels), and those parcels are greyed out r
 
 - **Joint coverage ≈ 70%, not 95%:** independent per-head calibration (§2).
 - The `Dcells` subset from the reference algorithm is computed but never used.
-- Quantiles use `np.quantile(…, 1−α)` without the finite-sample $(n+1)$ correction, and scores are rounded to
+- Quantiles use `np.quantile(…, 1−α)` without the finite-sample $`(n+1)`$ correction, and scores are rounded to
   4 decimals (both minor).
 - Maps: fixed top-10% rule, plus the label-7 bug above.
 

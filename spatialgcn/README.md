@@ -17,7 +17,9 @@ Every pixel in the patch is a **node** holding its 65-band spectrum. Each node i
 neighbours (up, down, left, right). A *graph convolution* updates every node with the average of its
 neighbours, transformed by learned weights:
 
-$$H^{(l+1)} = \sigma\!\left(\hat D^{-1/2}\hat A\,\hat D^{-1/2}\,H^{(l)}\,W^{(l)}\right), \qquad \hat A = A + I$$
+```math
+H^{(l+1)} = \sigma\!\left(\hat D^{-1/2}\hat A\,\hat D^{-1/2}\,H^{(l)}\,W^{(l)}\right), \qquad \hat A = A + I
+```
 
 *In words: "become a blend of yourself and your neighbours, then pass through a small neural layer".* Three
 layers (64 → 128 → 128 units) spread information about 3 pixels in each direction. The node features are

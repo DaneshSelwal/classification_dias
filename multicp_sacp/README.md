@@ -22,12 +22,14 @@ accept it.
 
 **Step 1. Smooth and renormalise each head's probabilities** (λ = 0.5, one pass):
 
-$$\tilde p^{(h)}_k(i) = (1-\lambda)\,\hat p^{(h)}_k(i) + \lambda\cdot\frac{1}{|\mathcal N(i)|}\sum_{j\in\mathcal N(i)}\hat p^{(h)}_k(j), \qquad \tilde p^{(h)}(i) \leftarrow \frac{\tilde p^{(h)}(i)}{\sum_k \tilde p^{(h)}_k(i)}$$
+```math
+\tilde p^{(h)}_k(i) = (1-\lambda)\,\hat p^{(h)}_k(i) + \lambda\cdot\frac{1}{|\mathcal N(i)|}\sum_{j\in\mathcal N(i)}\hat p^{(h)}_k(j), \qquad \tilde p^{(h)}(i) \leftarrow \frac{\tilde p^{(h)}(i)}{\sum_k \tilde p^{(h)}_k(i)}
+```
 
 *Renormalising keeps every pixel's probabilities summing to 1, so the score functions stay valid.*
 
-**Step 2. Score, calibrate, intersect.** RAPS or SAPS scores from $\tilde p^{(h)}$; one threshold
-$\hat q^{(h)}$ per head; final set $C(i) = \bigcap_h \{k : s^{(h)}_k(i) \le \hat q^{(h)}\}$. These are
+**Step 2. Score, calibrate, intersect.** RAPS or SAPS scores from $`\tilde p^{(h)}`$; one threshold
+$`\hat q^{(h)}`$ per head; final set $`C(i) = \bigcap_h \{k : s^{(h)}_k(i) \le \hat q^{(h)}\}`$. These are
 exactly the formulas in [multicp/ §2](../multicp/README.md#2-the-maths-step-by-step).
 
 > **Worked example.** One head says (crop A 0.60, crop B 0.40) at a pixel whose neighbours average
