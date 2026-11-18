@@ -337,7 +337,7 @@ cut-off per class and bring every class close to 95%. Clustered CP sits in betwe
 | <img src="docs/figures/uncertainty/multicp_head_sweep.png" alt="MultiCP head sweep"> | <img src="docs/figures/uncertainty/spatial_window_sweep.png" alt="SACP and SCMCP window sweep"> |
 | **MultiCP:** coverage drops by ~5% per head, tracking 0.95ᴷ → [multicp/](multicp/README.md) | **SACP / SCMCP:** effect of the smoothing window → [sacp/](sacp/README.md), [multicp_sacp/](multicp_sacp/README.md) |
 | <img src="docs/figures/uncertainty/credal_au_eu.png" alt="Credal AU EU"> | <img src="docs/figures/uncertainty/dapm_uncertain_pixels.png" alt="DAPM uncertain pixels"> |
-| **CREDIT vs CreDE:** aleatoric and epistemic uncertainty → [credit/](credit/README.md), [ensemble/](ensemble/README.md) | **DAPM:** only 122–434 pixels flagged → [dapm/](dapm/README.md) |
+| **CREDIT vs CreDE:** aleatoric and epistemic uncertainty → [credit/](credit/README.md), [ensemble/](ensemble/README.md) | **DAPM:** only 122–434 pixels flagged, scattered at random rather than on field edges → [dapm/](dapm/README.md) |
 
 ---
 
