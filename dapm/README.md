@@ -71,7 +71,7 @@ target pixels the classifier's own soft prediction stands in for the missing lab
    $`p^{(s)}`$, $`s = 1..30`$.
 3. Let $`c_1, c_2`$ be the two classes with the highest *mean* probability. Run **Welch's t-test** on the 30
    values of $`p^{(s)}_{c_1}`$ against the 30 values of $`p^{(s)}_{c_2}`$.
-4. **Uncertain** if $`p\text{-value} > 0.05`$, i.e. we cannot be 95% sure the top class really beats the
+4. **Uncertain** if $`p\text{-value} \gt 0.05`$, i.e. we cannot be 95% sure the top class really beats the
    runner-up.
 
 > **Worked example.** Over 30 draws, crop A averages 0.48 (sd 0.15) and crop B 0.42 (sd 0.15). Welch's

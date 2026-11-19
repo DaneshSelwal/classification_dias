@@ -41,9 +41,9 @@ The models were trained for 100 epochs. The `DOFA_Hiera_Fusion` model achieved t
 
 The fusion model demonstrates an exceptional accuracy of 99.65%, highlighting the necessity of combining spatial and dynamic spectral features. The standalone spectral model (`DOFA_Spectral`) struggles with spatial ambiguity, yielding a much lower accuracy of 68.84%.
 
-![Model Comparison Metrics](results/training_plots/model_comparison_metrics.png){width=6in}
+![Model Comparison Metrics](results/training_plots/model_comparison_metrics.png)
 
-![Confusion Matrices](results/training_plots/confusion_matrices_side_by_side.png){width=6in}
+![Confusion Matrices](results/training_plots/confusion_matrices_side_by_side.png)
 
 ### Training Dynamics
 
@@ -51,7 +51,7 @@ The learning curves reflect the stability and rapid convergence of the spatial a
 
 | DOFA_Hiera_Fusion | DOFA_Spectral | Hiera_ViT |
 | :---: | :---: | :---: |
-| ![](results/training_plots/DOFA_Hiera_Fusion_training_curves.png){width=2in} | ![](results/training_plots/DOFA_Spectral_training_curves.png){width=2in} | ![](results/training_plots/Hiera_ViT_training_curves.png){width=2in} |
+| ![](results/training_plots/DOFA_Hiera_Fusion_training_curves.png) | ![](results/training_plots/DOFA_Spectral_training_curves.png) | ![](results/training_plots/Hiera_ViT_training_curves.png) |
 
 ### Conformal Prediction and Uncertainty Analysis
 
@@ -68,7 +68,7 @@ We evaluated conformal prediction coverage and set sizes at a target coverage of
 
 `DOFA_Hiera_Fusion` maintains near-perfect coverage with a minimal average set size (~1.0), meaning it almost always provides a single, correct prediction. In contrast, `DOFA_Spectral` requires an average set size of ~2.6 to achieve the same 95% confidence, reflecting its high underlying uncertainty.
 
-![Uncertainty Proxy Metrics](results/training_plots/uncertainty_proxy_metrics.png){width=6in}
+![Uncertainty Proxy Metrics](results/training_plots/uncertainty_proxy_metrics.png)
 
 ### Scene Visualizations
 
@@ -78,15 +78,15 @@ The predicted classification maps demonstrate the qualitative improvements of th
 
 | Scene RGB | Ground Truth Label Map |
 | :---: | :---: |
-| ![](results/scene_visualizations/scene_rgb.png){width=3in} | ![](results/scene_visualizations/ground_truth_label_map.png){width=3in} |
+| ![](results/scene_visualizations/scene_rgb.png) | ![](results/scene_visualizations/ground_truth_label_map.png) |
 
 **Classification Results:**
 
 | DOFA_Hiera_Fusion | Hiera_ViT | DOFA_Spectral |
 | :---: | :---: | :---: |
-| ![](results/scene_visualizations/DOFA_Hiera_Fusion_initial_classification.png){width=2in} | ![](results/scene_visualizations/Hiera_ViT_initial_classification.png){width=2in} | ![](results/scene_visualizations/DOFA_Spectral_initial_classification.png){width=2in} |
+| ![](results/scene_visualizations/DOFA_Hiera_Fusion_initial_classification.png) | ![](results/scene_visualizations/Hiera_ViT_initial_classification.png) | ![](results/scene_visualizations/DOFA_Spectral_initial_classification.png) |
 
-![Combined Initial Classification Overview](results/scene_visualizations/combined_initial_classification_overview.png){width=6in}
+![Combined Initial Classification Overview](results/scene_visualizations/combined_initial_classification_overview.png)
 
 ## Conclusion
 The application of the DOFA framework to hyperspectral image classification highlights the power of dynamic wavelength tokenization when combined with spatial hierarchical modeling. The `DOFA_Hiera_Fusion` model achieves outstanding performance (99.65% accuracy) and optimal uncertainty calibration, outputting highly confident and accurate singleton prediction sets. The purely spectral model, while benefiting from the flexible tokenizer, lacks the spatial context required for competitive accuracy, resulting in larger conformal prediction sets. Overall, DOFA's foundational approach coupled with spatial fusion represents a highly robust solution for earth observation tasks.

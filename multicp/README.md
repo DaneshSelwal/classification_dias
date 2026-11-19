@@ -35,7 +35,7 @@ Multi-CP library:
 - **RAPS** (randomised, $`k_{reg} = 5`$, $`\lambda = 0.05`$): probability mass of all classes ranked above
   $`y`$, plus a random fraction $`u \sim U(0,1)`$ of $`y`$'s own mass, plus a penalty $`\lambda`$ for each rank
   beyond 5:
-  $`s^{(h)}(x,y) = \sum_{j:\,r_j<r_y}\hat p_j + u\,\hat p_y + \lambda\max(r_y - 5, 0)`$
+  $`s^{(h)}(x,y) = \sum_{j:\,r_j \lt r_y}\hat p_j + u\,\hat p_y + \lambda\max(r_y - 5, 0)`$
 - **SAPS** ($`\gamma = 0.3`$): only the **top** probability is used, and every lower rank adds a fixed step.
   With ranks counted from 0 (top class $`r_y = 0`$): $`s(x, y) = u\,\hat p_{\max}`$ if $`r_y = 0`$, else
   $`\hat p_{\max} + \gamma\,(r_y - 1 + u)`$.
