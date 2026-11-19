@@ -144,7 +144,7 @@ not widen the outlines much: by then each pixel's score is already dominated by 
 - The forced non-empty rule makes coverage ≥ accuracy by construction on near-perfect models.
 - Note the code's update is $`\lambda\cdot\text{own} + \lambda\cdot\text{neighbours}`$. This equals a
   proper weighted average only for λ = 0.5, the value used.
-- AlexNet inherits the seed-10/seed-42 overlap ([main README §8](../README.md#10-limitations-and-threats-to-validity)).
+- AlexNet inherits the seed-10/seed-42 overlap ([main README §8](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
 
 ## References
 

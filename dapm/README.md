@@ -158,7 +158,7 @@ sit near 95%, with ~4–5% empty sets and no multi-class sets. Split CP's mean p
 - "Target domain" = unlabelled pixels of the **same scene**, not a different sensor or date, so this is
   domain alignment in a mild sense.
 - Inherits the random-split optimism and, for AlexNet's CP results, the seed-10/seed-42 overlap
-  ([main README §8](../README.md#10-limitations-and-threats-to-validity)).
+  ([main README §8](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
 
 ## References
 

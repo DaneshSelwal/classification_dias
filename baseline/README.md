@@ -174,7 +174,7 @@ $`\hat q`$, and always contains at least the top class.
 
 | Setting | Value |
 |---|---|
-| Backbones | AlexNet-CNN, GFNet, ViT-UNet (architectures in [main README §5](../README.md#5-model-architectures)) |
+| Backbones | AlexNet-CNN, GFNet, ViT-UNet (architectures in [main README §5](../docs/02_models_and_classification.md#5-model-architectures)) |
 | Training | 100 epochs, batch 128, lr 3 × 10⁻⁴ cosine, label smoothing 0.05, dropout 0.25 |
 | α | 0.05 (95% target) |
 | Quantile rule | $`\lceil (n+1)(1-\alpha)\rceil / n`$, `method="higher"` |
@@ -215,7 +215,7 @@ $`\hat q`$, and always contains at least the top class.
   covering.
 - **Set size = coverage = singleton rate in every row.** That is only possible if every set holds either
   exactly the right class or nothing. There are **no** 2-class sets. The ~5% empty sets are the method
-  abstaining on its least-confident pixels; the [main README §8.2](../README.md#82-rq2--what-do-the-prediction-sets-look-like)
+  abstaining on its least-confident pixels; the [main README §8.2](../docs/04_uncertainty_results.md#82-rq2--what-do-the-prediction-sets-look-like)
   explains why.
 - **Mean per-class coverage** is the column that separates the methods. Split CP averages 0.921–0.930;
   class-conditional and RC3P average 0.948–0.967.
@@ -241,7 +241,7 @@ Source: [`results/uncertainty_results/per_class_coverage.csv`](results/uncertain
 | AlexNet · RC3P | 0.95 | — |
 
 **Reading Figure 2.** The under-covered cells are exactly the two rare classes from the class
-distribution ([main README, Figure 2](../README.md#32-the-scene-and-its-classes)). Split CP uses one
+distribution ([main README, Figure 2](../docs/01_data_and_setup.md#32-the-scene-and-its-classes)). Split CP uses one
 cut-off for everyone. That cut-off is dominated by the abundant, easy classes, and rare classes, whose
 pixels tend to receive lower probabilities, fail it more often. The class-conditional and RC3P rows are
 close to white throughout.
@@ -307,7 +307,7 @@ classes never clear it. The [DOFA backbone](../dofa/README.md) shows the opposit
   but the conformal notebook draws calibration/evaluation pixels from the seed-42 split. **75.2%** of
   those pixels were in AlexNet's training set.
 - **RAPS cannot reach its 95% target here** (§3.5). Its 100% coverage reflects accuracy, not calibration.
-- All results inherit the optimistic random pixel split ([main README §10](../README.md#10-limitations-and-threats-to-validity)).
+- All results inherit the optimistic random pixel split ([main README §10](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
 
 ## References
 

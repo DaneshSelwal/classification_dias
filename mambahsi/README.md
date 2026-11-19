@@ -78,7 +78,7 @@ Every non-RAPS set is a singleton or empty, so set size = coverage.*
 
 ## 3. Caveats
 
-The random-split optimism applies ([main README §10](../README.md#10-limitations-and-threats-to-validity)).
+The random-split optimism applies ([main README §10](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
 The `tf.scan` implementation approximates Mamba's hardware-aware kernel; numerical results should match,
 but speed does not.
 
