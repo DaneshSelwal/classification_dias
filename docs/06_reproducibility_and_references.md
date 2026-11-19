@@ -7,7 +7,7 @@
 ## 11. Repository map and reproducibility
 
 ```
-Hyperspectral-LandCover-Uncertainty/
+DIAS-65Band-Hyperspectral-UQ/
 ├── README.md                 ← overview: what we did and the end result
 ├── LICENSE                   ← Apache 2.0
 ├── docs/                     ← full report: six chapters + figures/
@@ -49,10 +49,10 @@ committed `results/` files and the Hugging Face data.
 ```bibtex
 @misc{selwal2026dias_uq,
   author       = {Selwal, Danesh},
-  title        = {Knowing When the Map Is Wrong: Uncertainty Quantification for
-                  65-Band DIAS Hyperspectral Land-Cover Classification},
+  title        = {Uncertainty Quantification for DIAS 65-Band Hyperspectral
+                  Land-Cover Classification},
   year         = {2026},
-  howpublished = {\url{https://github.com/DaneshSelwal/Hyperspectral-LandCover-Uncertainty}}
+  howpublished = {\url{https://github.com/DaneshSelwal/DIAS-65Band-Hyperspectral-UQ}}
 }
 ```
 
