@@ -33,7 +33,7 @@ softmax over **cosine similarities**:
 **What this is, and what it isn't.** The text tower is trained **from scratch**, and the prompts carry no
 meaning ("class one"). This is therefore not the pretrained GeoRSCLIP, and it behaves like a normal
 classifier with a cosine-similarity head. With real class names (see the open question in the
-[main README](../docs/01_data_and_setup.md#32-the-scene-and-its-classes)) and pretrained weights, the text side could
+[main README](../README.md#32-the-scene-and-its-classes)) and pretrained weights, the text side could
 contribute real knowledge, e.g. that "salt pan" and "dry lake bed" are related.
 
 *Implementation note:* the notebook's hard-coded prompt list has 7 entries, left over from the 6-band
@@ -56,7 +56,7 @@ Classification: accuracy 100.00%, macro-F1 1.000, NLL 0.0396, ECE 0.0388
 ([`results/classification_summary.csv`](results/classification_summary.csv)).*
 
 **Reading Table 1.** This is the near-perfect pattern again: ≈ 95% coverage, ≈ 5% empty sets, RAPS
-always top-1 ([why](../docs/04_uncertainty_results.md#82-rq2--what-do-the-prediction-sets-look-like)). One detail stands out.
+always top-1 ([why](../README.md#82-rq2--what-do-the-prediction-sets-look-like)). One detail stands out.
 Split CP's mean per-class coverage (0.960) is *higher* than class-conditional CP's (0.945). With 100%
 accuracy every class is equally easy, so one shared cut-off is already fair. Class-conditional CP then
 only adds estimation noise from the smaller per-class calibration sets.
@@ -75,7 +75,7 @@ only adds estimation noise from the smaller per-class calibration sets.
 
 - The prompts carry no semantics and the text tower is untrained at the start, so "vision–language" here
   is architectural only.
-- The random-split optimism applies ([main README §10](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
+- The random-split optimism applies ([main README §10](../README.md#10-limitations-and-threats-to-validity)).
 
 ## References
 

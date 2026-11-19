@@ -101,7 +101,7 @@ Put the three regimes side by side:
 
 ## 3. Caveats
 
-- The random-split optimism applies ([main README §10](../docs/05_limitations.md#10-limitations-and-threats-to-validity)).
+- The random-split optimism applies ([main README §10](../README.md#10-limitations-and-threats-to-validity)).
 - A graph over a regular grid is mathematically close to a convolution; the gain over a CNN here comes
   from the symmetric neighbour averaging, not from irregular structure.
 

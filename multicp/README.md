@@ -144,7 +144,7 @@ the rule, not measured. Figure 3 places it next to the other methods.
 <p align="center"><img src="../docs/figures/uncertainty/flagged_share_by_method.png" width="90%" alt="Flagged share by method"></p>
 
 *__Figure 3.__ Share of the scene flagged uncertain by each method (log scale). Read with
-[main README §8.5](../docs/04_uncertainty_results.md#85-rq5--how-much-of-the-map-does-each-method-call-uncertain).*
+[main README §8.5](../README.md#85-rq5--how-much-of-the-map-does-each-method-call-uncertain).*
 
 ---
 

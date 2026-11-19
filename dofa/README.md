@@ -22,13 +22,13 @@
 | **Hiera-ViT** | A hierarchical Vision Transformer: attention over the 9 × 9 patch at two scales (128 → 256 channels), with tokens pooled between stages | 100.00% |
 | **DOFA + Hiera Fusion** | Concatenates both feature sets (fusion dimension 256) | 99.98% |
 
-**Why DOFA-Spectral is weaker.** The [data analysis](../docs/01_data_and_setup.md#34-how-much-independent-information-do-65-bands-carry)
+**Why DOFA-Spectral is weaker.** The [data analysis](../README.md#34-how-much-independent-information-do-65-bands-carry)
 shows that classes 3–8 overlap when you look at spectra alone: classes 5–8 are within 1.8–2.9° of each
 other in spectral angle. Spatial *layout* is what separates them. DOFA-Spectral averages it away, and Hiera
 keeps it. There are two further handicaps:
 - the notebook **assumes** 65 evenly spaced wavelengths from 0.40 to 2.50 µm (the real band centres are
   unknown), and
-- the input values wrap round for bright pixels ([main README §3.5](../docs/01_data_and_setup.md#35-a-data-quality-finding-stored-values-wrap-round)),
+- the input values wrap round for bright pixels ([main README §3.5](../README.md#35-a-data-quality-finding-stored-values-wrap-round)),
   which distorts the spectral shape that wavelength conditioning relies on.
 
 ### How the wavelength hypernetwork works
@@ -85,7 +85,7 @@ sensor with different bands could reuse the same network.
 is wrong on 16% of pixels, yet every method still covers ≈ 95%. It manages this by **widening the sets**:
 38% of Split CP sets contain two or more classes.
 - **No empty sets.** The threshold no longer has to cut into correct predictions to use up its 5% budget;
-  the model's own errors already supply it ([contrast with near-perfect models](../docs/04_uncertainty_results.md#82-rq2--what-do-the-prediction-sets-look-like)).
+  the model's own errors already supply it ([contrast with near-perfect models](../README.md#82-rq2--what-do-the-prediction-sets-look-like)).
 - **RAPS works here** (0.951). Unlike on the near-perfect models, the true class is often *not* ranked
   first, so the RAPS score is no longer always zero.
 - **Hiera and Fusion** behave like every other near-perfect model: ~95% singletons, ~5% empty.
@@ -172,7 +172,7 @@ small classes.*
 
 - The wavelengths are assumed (0.40–2.50 µm, evenly spaced), so DOFA's conditioning is approximate.
 - The DOFA weights are trained from scratch here; this is not the pretrained DOFA foundation model.
-- The random-split optimism ([main README §10](../docs/05_limitations.md#10-limitations-and-threats-to-validity)) applies, most strongly to Hiera and Fusion.
+- The random-split optimism ([main README §10](../README.md#10-limitations-and-threats-to-validity)) applies, most strongly to Hiera and Fusion.
 
 ## References
 
